@@ -86,3 +86,24 @@ C#製 `Pokemon3genRNGLibrary` が持つ機能を、Moonbit言語へ移植する�
 ### 6. 検証
 
 C#版ライブラリと同一の初期シードおよび条件を与えた際に、全ての出力結果が完全に一致することを保証するテストスイートを構築する。
+
+## 実装進捗
+
+### 完了項目
+
+#### 基本型定義 (`src/types/`)
+- ✅ IVs型（HABCDS表記対応）
+- ✅ Nature型（性格、0-24の値）
+- ✅ Gender型（性別）
+- ✅ PokemonResult型（生成結果）
+
+#### StandardIVsGenerator (`src/ivs-generator/`)
+- ✅ 不変版実装（`generate_ivs_standard_immut`）
+- ✅ 可変版実装（`generate_ivs_standard_mut`）
+- ✅ C#版との互換性確認（シード0x1 → 6-14-16-1-11-1）
+- ✅ in-sourceテスト（LCG状態更新、期待値、互換性）
+
+### 次のステップ
+- その他IVsGenerator群の実装
+- NatureGenerator実装
+- GenderGenerator実装

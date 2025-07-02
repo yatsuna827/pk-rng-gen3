@@ -1,8 +1,4 @@
-pub fn greeting() -> Unit {
-  println(@lib.hello())
-}
-
-pub fn debug_lcg() -> Unit {
+let debug_lcg() -> Unit {
   let lcg = @lcg32.Lcg32(0x00000001U)
   let next1 = lcg.next()
   println("LCG(0x00000001).next() = 0x" + @format-hex.to_hex(next1.inner()))
