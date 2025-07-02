@@ -1,0 +1,3 @@
+[submodule "original"]
+	path = original
+	url = https://github.com/yatsuna827/Pokemon3genRNGLibrary.git
