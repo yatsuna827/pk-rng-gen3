@@ -123,18 +123,26 @@ C#版ライブラリと同一の初期シードおよび条件を与えた際に
 - ✅ PosteriorInterruptedIVsGenerator（posterior_interrupted.mbt）
 - ✅ RoamingBuggyIVsGenerator（roaming_buggy.mbt）
 - ✅ 各実装で不変版・可変版の両方対応
-- ✅ 全15テスト通過
+- ✅ 全22テスト通過
 - ✅ ファイル分割によるモジュール整理
+- ✅ C#実装結果を用いた互換性テスト追加
+
+#### NatureGenerator群 (`src/nature-generator/`)
+- ✅ StandardNatureGenerator（standard.mbt）
+- ✅ 不変版・可変版の両方対応
+- ✅ C#実装結果を用いた互換性テスト追加
+- ✅ 全5テスト通過
 
 #### 開発プロセス改善
 - ✅ C#実装結果取得手順の確立（csharp-tests/ディレクトリ）
 - ✅ テストコードのセルフレビュー基準明確化
 - ✅ 1つずつ実装・確認を取る開発フロー確立
+- ✅ 結果ファイル用空ファイル作成を手順書に追加
 
 ### 現在の状況
-IVsGenerator群の実装が完了。C#版との互換性テストのための期待値取得待ち。
+IVsGenerator群（5種類）とNatureGenerator（standard版）の実装が完了。C#版との互換性テストも完了し、全27テストが通過している。
 
 ### 次のステップ
-1. **即座対応**: C#実装結果取得してIVsGeneratorテスト修正
-2. **高優先度**: NatureGenerator実装（standard版から開始）
-3. **中優先度**: 残りのGenerator群実装
+1. **高優先度**: NatureGenerator残り4種類実装（synchronize, fixed, null, safari系）
+2. **中優先度**: 残りのGenerator群実装（Level, Gender, PID, EncounterSlot）
+3. **低優先度**: オーケストレーション関数実装（create_wild_pokemon_generator）
