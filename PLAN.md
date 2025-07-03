@@ -111,13 +111,30 @@ C#版ライブラリと同一の初期シードおよび条件を与えた際に
 - ✅ Gender型（性別）
 - ✅ PokemonResult型（生成結果）
 
-#### StandardIVsGenerator (`src/ivs-generator/`)
-- ✅ 不変版実装（`generate_ivs_standard_immut`）
-- ✅ 可変版実装（`generate_ivs_standard_mut`）
-- ✅ C#版との互換性確認（シード0x1 → 6-14-16-1-11-1）
-- ✅ in-sourceテスト（LCG状態更新、期待値、互換性）
+#### LCG32実装 (`src/lcg32/`)
+- ✅ 不変版・可変版LCG32実装
+- ✅ ジャンプ機能（高速前進・後退）
+- ✅ 完全なテストスイート
+
+#### IVsGenerator群 (`src/ivs-generator/`)
+- ✅ StandardIVsGenerator（standard.mbt）
+- ✅ PriorInterruptIVsGenerator（prior_interrupt.mbt）
+- ✅ MiddleInterruptedIVsGenerator（middle_interrupted.mbt）
+- ✅ PosteriorInterruptedIVsGenerator（posterior_interrupted.mbt）
+- ✅ RoamingBuggyIVsGenerator（roaming_buggy.mbt）
+- ✅ 各実装で不変版・可変版の両方対応
+- ✅ 全15テスト通過
+- ✅ ファイル分割によるモジュール整理
+
+#### 開発プロセス改善
+- ✅ C#実装結果取得手順の確立（csharp-tests/ディレクトリ）
+- ✅ テストコードのセルフレビュー基準明確化
+- ✅ 1つずつ実装・確認を取る開発フロー確立
+
+### 現在の状況
+IVsGenerator群の実装が完了。C#版との互換性テストのための期待値取得待ち。
 
 ### 次のステップ
-- その他IVsGenerator群の実装
-- NatureGenerator実装
-- GenderGenerator実装
+1. **即座対応**: C#実装結果取得してIVsGeneratorテスト修正
+2. **高優先度**: NatureGenerator実装（standard版から開始）
+3. **中優先度**: 残りのGenerator群実装

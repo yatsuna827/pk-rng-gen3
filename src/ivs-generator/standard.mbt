@@ -36,6 +36,18 @@ test "generate_ivs_standard_mut should advance LCG state correctly" {
 }
 
 ///|
+test "standard should produce expected values for seed 0x12345678" {
+  let lcg = @lcg32.Lcg32(0x12345678U)
+  let ivs = generate_ivs_standard_immut(lcg)
+  assert_eq(ivs.h(), 17)
+  assert_eq(ivs.a(), 27)
+  assert_eq(ivs.b(), 2)
+  assert_eq(ivs.c(), 7)
+  assert_eq(ivs.d(), 1)
+  assert_eq(ivs.s(), 10)
+}
+
+///|
 test "should produce expected values for known seed" {
   let lcg = @lcg32.Lcg32(0x00000001U)
   let ivs = generate_ivs_standard_immut(lcg)
