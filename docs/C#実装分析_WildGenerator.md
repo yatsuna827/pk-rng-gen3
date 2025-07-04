@@ -286,20 +286,6 @@ fn create_wild_pokemon_generator(
 }
 ```
 
-### 設定ファクトリー
-
-```moonbit
-fn create_wild_config(map_data: MapData, conditions: WildConditions) -> WildConfig {
-  WildConfig {
-    encounter_drawer: select_encounter_drawer(map_data.version, conditions),
-    slot_generator: create_slot_generator(map_data.encounter_table, conditions.field_ability),
-    level_generator: select_level_generator(conditions.field_ability),
-    nature_generator: select_nature_generator(map_data.area_type, conditions),
-    gender_generator: select_gender_generator(conditions.field_ability),
-  }
-}
-```
-
 ## 使用例とテストケース
 
 ### 基本的な使用例
@@ -332,9 +318,3 @@ var arg = new WildGenerationArgument {
 };
 var generator = new WildGenerator(safariMap, arg);
 ```
-
-## まとめ
-
-WildGeneratorは、Pokemon第3世代の複雑な野生ポケモン生成ロジックを統合的に管理するシステム。各コンポーネントの組み合わせにより、様々なゲーム状況と特性効果を正確に再現する。
-
-MoonBit移植では、この統合システムを関数型アプローチで再実装し、C#版の複雑なオブジェクト構造を簡潔な関数合成で表現する予定。

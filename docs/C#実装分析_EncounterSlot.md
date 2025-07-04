@@ -253,7 +253,7 @@ private GBASlot SelectFromStandardTable(ref uint seed)
             return slots[i];
     }
     
-    return slots[slots.Length - 1];  // 最後のスロット（フォールバック）
+    return slots[slots.Length - 1];
 }
 ```
 
@@ -309,21 +309,14 @@ fn calculate_encounter_rate(
 
 ### 4.2. 特殊スロット処理
 ```moonbit
-enum SpecialSlotResult {
-  Success(GBASlot)
-  FailWithConsume    // RNG消費あり失敗
-  FailWithoutConsume // RNG消費なし失敗
-}
-
 fn try_special_slots(
   lcg_ref: Lcg32Ref,
   generators: Array[SpecialSlotGenerator]
 ) -> Option[GBASlot] {
   for generator in generators {
     match generator.try_generate(lcg_ref) {
-      SpecialSlotResult::Success(slot) => return Some(slot)
-      SpecialSlotResult::FailWithConsume => continue
-      SpecialSlotResult::FailWithoutConsume => continue
+      Some(slot) => return Some(slot)
+      None => continue
     }
   }
   None
@@ -344,7 +337,7 @@ fn select_standard_slot(lcg_ref: Lcg32Ref, probabilities: Array[Int]) -> Int {
     if random < cumulative { return i }
   }
   
-  probabilities.length() - 1  // フォールバック
+  probabilities.length() - 1
 }
 ```
 
@@ -369,5 +362,3 @@ fn select_standard_slot(lcg_ref: Lcg32Ref, probabilities: Array[Int]) -> Int {
 - エンカウント判定: 通常の計算式
 - スロット分布: 水上と同じ
 - 特殊効果: 静電気、磁力は有効
-
-この複雑なシステムにより、多様なエンカウント体験とポケモン収集戦略が可能になっている。
