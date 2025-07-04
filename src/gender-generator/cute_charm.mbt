@@ -15,8 +15,7 @@ pub fn generate_gender_cute_charm_mut(
   if cute_charm_gender == @types.Genderless {
     return @types.Genderless
   }
-  let rand_value = lcg_ref.get_rand(m=3)
-  if rand_value != 0 {
+  if lcg_ref.get_rand(m=3) != 0 {
     cute_charm_gender.reverse()
   } else {
     @types.Genderless
