@@ -131,8 +131,8 @@ C#版ライブラリと同一の初期シードおよび条件を与えた際に
 - ✅ StandardNatureGenerator（standard.mbt）
 - ✅ SynchronizeNatureGenerator（synchronize.mbt）
 - ✅ FixedNatureGenerator（fixed.mbt）
-- 🔄 HoennSafariNatureGenerator（hoenn_safari.mbt）- 実装済みだがC#互換性に問題
-- ❌ EmSafariNatureGenerator（未実装）
+- ✅ HoennSafariNatureGenerator（hoenn_safari.mbt）
+- ✅ EmSafariNatureGenerator（hoenn_safari.mbt）
 - ✅ 不変版・可変版の両方対応
 - ✅ C#実装結果を用いた互換性テスト追加
 - ✅ t-wada TDD基準でテストレビュー完了
@@ -148,27 +148,33 @@ C#版ライブラリと同一の初期シードおよび条件を与えた際に
 - ✅ 1つずつ実装・確認を取る開発フロー確立
 - ✅ 結果ファイル用空ファイル作成を手順書に追加
 - ✅ csharp-testsディレクトリの効率的な管理手順確立
+- ✅ 開発ワークフロー（fmt/check/test）をCLAUDE.mdに明文化
+- ✅ Claude Codeカスタムコマンド（/t-wada, /poyo）追加
 
 #### NatureGenerator群 (`src/nature-generator/`)
 - ✅ StandardNatureGenerator（standard.mbt）
 - ✅ SynchronizeNatureGenerator（synchronize.mbt）
 - ✅ FixedNatureGenerator（fixed.mbt）
-- ✅ HoennSafariNatureGenerator（hoenn_safari.mbt）- C#互換性修正完了
+- ✅ HoennSafariNatureGenerator（hoenn_safari.mbt）
+- ✅ EmSafariNatureGenerator（hoenn_safari.mbt）
 - ✅ 不変版・可変版の両方対応
 - ✅ C#実装結果を用いた互換性テスト追加
 - ✅ t-wada TDD基準でテストレビュー完了
 - ✅ PokeBlock味分類のC#動的ロジック互換性確保
+- ✅ HoennSafariとEmSafariのファイル統合
 
 #### 重要な修正事項
 - ✅ PokeBlockの味分類をC#実装の動的計算ロジックに合わせて修正
 - ✅ 無補正性格（Hardy, Docile, Serious, Bashful, Quirky）は一切の味を好まない仕様を完全実装
 - ✅ シャッフル関数の独立化とテスト可能性向上
 - ✅ テストファーストでの品質保証
+- ✅ 理論上起きない状況をpanicに変更
+- ✅ デバッグファイル削除とコード品質改善
 
 ### 現在の状況
-IVsGenerator群（5種類）とNatureGenerator群（4種類：Standard, Synchronize, Fixed, HoennSafari）が完了。すべてのテストが通過し、C#実装との完全互換性を確保。
+IVsGenerator群（5種類）とNatureGenerator群（5種類：Standard, Synchronize, Fixed, HoennSafari, EmSafari）が完了。全56テストが通過し、C#実装との完全互換性を確保。コード品質改善とファイル統合も完了。
 
 ### 次のステップ
-1. **高優先度**: EmSafariNatureGenerator実装
-2. **中優先度**: 残りのGenerator群実装（Level, Gender, PID, EncounterSlot）
-3. **低優先度**: オーケストレーション関数実装（create_wild_pokemon_generator）
+1. **高優先度**: 残りのGenerator群実装（Level, Gender, PID, EncounterSlot）
+2. **中優先度**: オーケストレーション関数実装（create_wild_pokemon_generator）
+3. **低優先度**: 統合テストとパフォーマンス最適化
