@@ -1,4 +1,3 @@
-
 ///|
 pub fn generate_gender_null_immut(lcg : @lcg32.Lcg32) -> @types.Gender {
   @types.Genderless
@@ -23,4 +22,3 @@ test "null generator does not consume RNG" {
   let gender = generate_gender_null_mut(lcg_ref)
   assert_eq(lcg_ref.seed(), initial_seed)
 }
-

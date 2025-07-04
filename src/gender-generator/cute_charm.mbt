@@ -1,4 +1,3 @@
-
 ///|
 pub fn generate_gender_cute_charm_immut(
   lcg : @lcg32.Lcg32,
@@ -57,10 +56,16 @@ test "cute charm does not consume RNG for Genderless charm" {
 ///|
 test "cute charm matches C# implementation" {
   let male_test_cases = [
-    (0x00000000U, @types.Genderless), (0x00000001U, @types.Female), (0x00000002U, @types.Female),
-    (0x00000003U, @types.Female), (0x00000004U, @types.Female), (0x00000005U, @types.Female),
-    (0x00000006U, @types.Female), (0x00000007U, @types.Genderless), (0x00000008U, @types.Female),
-    (0x00000009U, @types.Female)
+    (0x00000000U, @types.Gender::Genderless),
+    (0x00000001U, @types.Female),
+    (0x00000002U, @types.Female),
+    (0x00000003U, @types.Female),
+    (0x00000004U, @types.Female),
+    (0x00000005U, @types.Female),
+    (0x00000006U, @types.Female),
+    (0x00000007U, @types.Gender::Genderless),
+    (0x00000008U, @types.Female),
+    (0x00000009U, @types.Female),
   ]
   for test_case in male_test_cases {
     let (seed, expected) = test_case
@@ -68,12 +73,17 @@ test "cute charm matches C# implementation" {
     let result = generate_gender_cute_charm_immut(lcg, @types.Male)
     assert_eq(result, expected)
   }
-  
   let female_test_cases = [
-    (0x00000000U, @types.Genderless), (0x00000001U, @types.Male), (0x00000002U, @types.Male),
-    (0x00000003U, @types.Male), (0x00000004U, @types.Male), (0x00000005U, @types.Male),
-    (0x00000006U, @types.Male), (0x00000007U, @types.Genderless), (0x00000008U, @types.Male),
-    (0x00000009U, @types.Male)
+    (0x00000000U, @types.Gender::Genderless),
+    (0x00000001U, @types.Male),
+    (0x00000002U, @types.Male),
+    (0x00000003U, @types.Male),
+    (0x00000004U, @types.Male),
+    (0x00000005U, @types.Male),
+    (0x00000006U, @types.Male),
+    (0x00000007U, @types.Gender::Genderless),
+    (0x00000008U, @types.Male),
+    (0x00000009U, @types.Male),
   ]
   for test_case in female_test_cases {
     let (seed, expected) = test_case

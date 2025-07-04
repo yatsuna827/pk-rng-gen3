@@ -1,4 +1,3 @@
-
 ///|
 pub fn generate_gender_fixed_immut(
   lcg : @lcg32.Lcg32,
@@ -34,7 +33,5 @@ test "fixed gender does not consume RNG" {
   let lcg_ref = @lcg32.Lcg32(0x11111111U).to_ref()
   let initial_seed = lcg_ref.seed()
   let gender = generate_gender_fixed_mut(lcg_ref, @types.Male)
-  
   assert_eq(lcg_ref.seed(), initial_seed)
 }
-

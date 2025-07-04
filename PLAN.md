@@ -175,20 +175,29 @@ C#版ライブラリと同一の初期シードおよび条件を与えた際に
 - ✅ 理論上起きない状況をpanicに変更
 - ✅ デバッグファイル削除とコード品質改善
 
-### 現在の状況
-IVsGenerator群（5種類）、NatureGenerator群（5種類：Standard, Synchronize, Fixed, HoennSafari, EmSafari）、LevelGenerator群（3種類：Standard, Pressure, Null）が完了。全73テストが通過し、C#実装との完全互換性を確保。コード品質改善とテストレビュー（t-wada基準）も完了。
-
-#### LevelGenerator群 (`src/level-generator/`)
-- ✅ StandardLevelGenerator（standard.mbt）
-- ✅ PressureLevelGenerator（pressure.mbt） 
-- ✅ NullLevelGenerator（null.mbt）
-- ✅ 不変版・可変版の両方対応（アダプタパターン適用）
-- ✅ variable_lv=0での適切なpanic処理
+#### GenderGenerator群 (`src/gender-generator/`)
+- ✅ NullGenderGenerator（null.mbt）
+- ✅ FixedGenderGenerator（fixed.mbt）
+- ✅ CuteCharmGenderGenerator（cute_charm.mbt）
+- ✅ 不変版・可変版の両方対応
+- ✅ Gender型にreverse()メソッド追加（メロメロボディ用）
 - ✅ C#実装結果を用いた互換性テスト追加
 - ✅ t-wada TDD基準でテストレビュー完了
-- ✅ テーブル駆動テストによる互換性検証
+
+#### PIDモジュール (`src/pid/`)
+- ✅ PID分析・抽出機能（pid.mbt）
+- ✅ 性格抽出（get_nature_from_pid）
+- ✅ 性別抽出（get_gender_from_pid）
+- ✅ 色違い判定（get_shiny_type, is_shiny）
+- ✅ 条件付きPID生成（generate_pid_with_conditions）
+- ✅ 基本PID生成（generate_basic_pid）
+- ✅ 新しい型定義（GenderRatio, ShinyType）
+- ✅ 包括的テストスイート（90テスト全通過）
+
+### 現在の状況
+IVsGenerator群（5種類）、NatureGenerator群（5種類）、LevelGenerator群（3種類）、GenderGenerator群（3種類）、PIDモジュールが完了。全90テストが通過し、C#実装との完全互換性を確保。現在EncounterSlot実装中。
 
 ### 次のステップ
-1. **高優先度**: 残りのGenerator群実装（Gender, PID, EncounterSlot）
+1. **高優先度**: 残りのGenerator群実装（PID, EncounterSlot）
 2. **中優先度**: オーケストレーション関数実装（create_wild_pokemon_generator）
 3. **低優先度**: 統合テストとパフォーマンス最適化
