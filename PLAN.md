@@ -54,8 +54,12 @@ C#製 `Pokemon3genRNGLibrary` が持つ機能を、Moonbit言語へ移植する�
 以下の具体的なアルゴリズムを実装した、独立した関数群を作成する。
 
 -   **基本実装方針:**
-    -   全てのコンポーネント関数は、まず**不変版 (`Immut`)** として実装する。これにより、各部品の純粋性とテストの容易性を保証する。
-    -   例: `generate_ivs_standard_immut`
+    -   全てのコンポーネント関数は、**可変版 (`Mut`)** と**不変版 (`Immut`)** の両方を提供する。
+    -   **不変版の実装**: 内部で可変版を呼び出すアダプタとして実装し、コードの重複を避ける。
+        - 不変版は`lcg.to_ref()`で可変参照に変換してから可変版を呼び出す
+        - 例: `generate_level_standard_immut`は内部で`generate_level_standard_mut`を呼び出す
+    -   **可変版の実装**: 実際のアルゴリズムロジックを実装する。
+    -   例: `generate_ivs_standard_immut`, `generate_ivs_standard_mut`
 
 -   **実装対象:**
     -   **個体値生成 (IVs):**
@@ -172,9 +176,19 @@ C#版ライブラリと同一の初期シードおよび条件を与えた際に
 - ✅ デバッグファイル削除とコード品質改善
 
 ### 現在の状況
-IVsGenerator群（5種類）とNatureGenerator群（5種類：Standard, Synchronize, Fixed, HoennSafari, EmSafari）が完了。全56テストが通過し、C#実装との完全互換性を確保。コード品質改善とファイル統合も完了。
+IVsGenerator群（5種類）、NatureGenerator群（5種類：Standard, Synchronize, Fixed, HoennSafari, EmSafari）、LevelGenerator群（3種類：Standard, Pressure, Null）が完了。全73テストが通過し、C#実装との完全互換性を確保。コード品質改善とテストレビュー（t-wada基準）も完了。
+
+#### LevelGenerator群 (`src/level-generator/`)
+- ✅ StandardLevelGenerator（standard.mbt）
+- ✅ PressureLevelGenerator（pressure.mbt） 
+- ✅ NullLevelGenerator（null.mbt）
+- ✅ 不変版・可変版の両方対応（アダプタパターン適用）
+- ✅ variable_lv=0での適切なpanic処理
+- ✅ C#実装結果を用いた互換性テスト追加
+- ✅ t-wada TDD基準でテストレビュー完了
+- ✅ テーブル駆動テストによる互換性検証
 
 ### 次のステップ
-1. **高優先度**: 残りのGenerator群実装（Level, Gender, PID, EncounterSlot）
+1. **高優先度**: 残りのGenerator群実装（Gender, PID, EncounterSlot）
 2. **中優先度**: オーケストレーション関数実装（create_wild_pokemon_generator）
 3. **低優先度**: 統合テストとパフォーマンス最適化
