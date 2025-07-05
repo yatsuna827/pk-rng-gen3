@@ -1,38 +1,30 @@
-
 ///| 
 pub fn generate_wild_pokemon_mut(
   lcg_ref : @lcg32.Lcg32Ref,
   slots : Array[@encounter_slot.GBASlot],
-  encounter_func : (@lcg32.Lcg32Ref, @encounter_slot.EncounterConfig) -> Bool,
+  encounter_fn : @encounter_slot.EncounterDrawerMut,
   slot_func : (@lcg32.Lcg32Ref, Array[@encounter_slot.GBASlot]) -> @encounter_slot.GBASlot,
   level_func : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
   ivs_func : (@lcg32.Lcg32Ref) -> @types.IVs,
   nature_func : (@lcg32.Lcg32Ref) -> @types.Nature,
-  gender_func : (@lcg32.Lcg32Ref) -> @types.Gender,
-  encounter_config : @encounter_slot.EncounterConfig
+  gender_func : (@lcg32.Lcg32Ref) -> @types.Gender
 ) -> @types.PokemonResult? {
-  if not(encounter_func(lcg_ref, encounter_config)) {
+  if not(encounter_fn(lcg_ref)) {
     return None
   }
-
   let slot = slot_func(lcg_ref, slots)
-
   let min_level = slot.min_level.reinterpret_as_uint()
   let max_level = slot.max_level.reinterpret_as_uint()
   let variable_lv = max_level - min_level + 1U
   let level = level_func(lcg_ref, min_level, variable_lv)
-
   let gender = gender_func(lcg_ref)
-
   let nature = nature_func(lcg_ref)
-
   let (pid, recalc_count) = @pid.generate_pid_with_conditions(
     lcg_ref,
     Some(nature),
     None,
     @types.GenderRatio::Male1Female1,
   )
-
   let ivs = ivs_func(lcg_ref)
   Some(@types.PokemonResult::{
     level,
@@ -48,18 +40,16 @@ pub fn generate_wild_pokemon_mut(
 pub fn generate_wild_pokemon_immut(
   lcg : @lcg32.Lcg32,
   slots : Array[@encounter_slot.GBASlot],
-  encounter_func : (@lcg32.Lcg32Ref, @encounter_slot.EncounterConfig) -> Bool,
+  encounter_fn : @encounter_slot.EncounterDrawerMut,
   slot_func : (@lcg32.Lcg32Ref, Array[@encounter_slot.GBASlot]) -> @encounter_slot.GBASlot,
   level_func : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
   ivs_func : (@lcg32.Lcg32Ref) -> @types.IVs,
   nature_func : (@lcg32.Lcg32Ref) -> @types.Nature,
-  gender_func : (@lcg32.Lcg32Ref) -> @types.Gender,
-  encounter_config : @encounter_slot.EncounterConfig
+  gender_func : (@lcg32.Lcg32Ref) -> @types.Gender
 ) -> @types.PokemonResult? {
   let lcg_ref = lcg.to_ref()
   generate_wild_pokemon_mut(
-    lcg_ref, slots, encounter_func, slot_func, level_func, ivs_func, nature_func,
-    gender_func, encounter_config,
+    lcg_ref, slots, encounter_fn, slot_func, level_func, ivs_func, nature_func, gender_func,
   )
 }
 
@@ -80,12 +70,6 @@ test "wild pokemon generation matches C# implementation" {
     @encounter_slot.GBASlot::{ pokemon_id: 311, min_level: 13, max_level: 13 }, // プラスル 1%
     @encounter_slot.GBASlot::{ pokemon_id: 312, min_level: 13, max_level: 13 }, // マイナン 1%
   ]
-  let encounter_config = @encounter_slot.EncounterConfig::{
-    base_encounter_rate: 25U,
-    riding_bicycle: false,
-    flute: None,
-    has_cleanse_tag: false,
-  }
 
   // C#実装結果: Seed: 12345678, Pokemon: ラクライ, Lv=12, PID=B22F82C3, Nature=Modest, IVs=[7,25,3,5,9,26]
   let result1 = generate_wild_pokemon_immut(
@@ -97,7 +81,6 @@ test "wild pokemon generation matches C# implementation" {
     @ivs_generator.generate_ivs_standard_mut,
     @nature_generator.generate_nature_standard_mut,
     @gender_generator.generate_gender_null_mut,
-    encounter_config,
   )
   let pokemon1 = result1.unwrap()
   assert_eq(pokemon1.level, 12U)
@@ -120,7 +103,6 @@ test "wild pokemon generation matches C# implementation" {
     @ivs_generator.generate_ivs_standard_mut,
     @nature_generator.generate_nature_standard_mut,
     @gender_generator.generate_gender_null_mut,
-    encounter_config,
   )
   let pokemon2 = result2.unwrap()
   assert_eq(pokemon2.level, 12U)
