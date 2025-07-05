@@ -179,7 +179,7 @@ fn create_test_slots(count : Int) -> Array[GBASlot] {
     max_level: 10,
   })
   for i = 0; i < count; i = i + 1 {
-    slots[i] = GBASlot::{ pokemon_id: i + 1, min_level: 5, max_level: 10 }
+    slots[i] = GBASlot::{ pokemon_id: 0, min_level: 5, max_level: 10 }
   }
   slots
 }
@@ -204,7 +204,7 @@ test "grass slot selection matches C# implementation" {
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
     let result = generate_grass_slot_immut(@lcg32.Lcg32(seed), slots)
-    assert_eq(result.pokemon_id, expected_slot_index + 1) // pokemon_idは1ベース
+    assert_eq(result, slots[expected_slot_index])
   }
 }
 
@@ -226,7 +226,7 @@ test "surf slot selection matches C# implementation" {
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
     let result = generate_surf_slot_immut(@lcg32.Lcg32(seed), slots)
-    assert_eq(result.pokemon_id, expected_slot_index + 1)
+    assert_eq(result, slots[expected_slot_index])
   }
 }
 
@@ -248,7 +248,7 @@ test "old rod slot selection matches C# implementation" {
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
     let result = generate_old_rod_slot_immut(@lcg32.Lcg32(seed), slots)
-    assert_eq(result.pokemon_id, expected_slot_index + 1)
+    assert_eq(result, slots[expected_slot_index])
   }
 }
 
@@ -270,7 +270,7 @@ test "good rod slot selection matches C# implementation" {
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
     let result = generate_good_rod_slot_immut(@lcg32.Lcg32(seed), slots)
-    assert_eq(result.pokemon_id, expected_slot_index + 1)
+    assert_eq(result, slots[expected_slot_index])
   }
 }
 
@@ -292,7 +292,7 @@ test "super rod slot selection matches C# implementation" {
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
     let result = generate_super_rod_slot_immut(@lcg32.Lcg32(seed), slots)
-    assert_eq(result.pokemon_id, expected_slot_index + 1)
+    assert_eq(result, slots[expected_slot_index])
   }
 }
 
@@ -314,7 +314,7 @@ test "rock smash slot selection matches C# implementation" {
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
     let result = generate_rock_smash_slot_immut(@lcg32.Lcg32(seed), slots)
-    assert_eq(result.pokemon_id, expected_slot_index + 1)
+    assert_eq(result, slots[expected_slot_index])
   }
 }
 
