@@ -1,24 +1,26 @@
 ///|
 pub fn try_generate_attract(
-  lcg_ref : @lcg32.Lcg32Ref,
   attractable_slots : Array[GBASlot]
-) -> GBASlot? {
-  if (lcg_ref.get_rand() & 1) == 1 || attractable_slots.length() == 0 {
-    None
-  } else {
-    let index = lcg_ref
-      .get_rand(m=attractable_slots.length().reinterpret_as_uint())
-      .reinterpret_as_int()
-    Some(attractable_slots[index])
+) -> @core.GeneratorMut[GBASlot?] {
+  let m = attractable_slots.length().reinterpret_as_uint()
+  lcg_ref => {
+    let rand = lcg_ref.get_rand() & 1
+    if m == 0 {
+      None
+    } else if rand == 1 {
+      None
+    } else {
+      let index = lcg_ref.get_rand(m~).reinterpret_as_int()
+      Some(attractable_slots[index])
+    }
   }
 }
 
 ///|
 pub fn try_generate_mass_outbreak(
-  lcg_ref : @lcg32.Lcg32Ref,
   mass_outbreak_slot : GBASlot
-) -> GBASlot? {
-  if lcg_ref.get_rand(m=100) < 50 {
+) -> @core.GeneratorMut[GBASlot?] {
+  lcg_ref => if lcg_ref.get_rand(m=100) < 50 {
     Some(mass_outbreak_slot)
   } else {
     None
@@ -77,7 +79,7 @@ test "attract generator matches C# implementation" {
   for test_case in test_cases {
     let (seed, expected_result, expected_final_seed) = test_case
     let lcg_ref = @lcg32.Lcg32(seed).to_ref()
-    let result = try_generate_attract(lcg_ref, attractable_slots)
+    let result = try_generate_attract(attractable_slots)(lcg_ref)
     let final_seed = lcg_ref.seed()
     assert_eq(result, expected_result)
     assert_eq(final_seed, expected_final_seed)
@@ -102,7 +104,7 @@ test "mass outbreak generator matches C# implementation" {
   for test_case in test_cases {
     let (seed, expected_result, expected_final_seed) = test_case
     let lcg_ref = @lcg32.Lcg32(seed).to_ref()
-    let result = try_generate_mass_outbreak(lcg_ref, outbreak_slot)
+    let result = try_generate_mass_outbreak(outbreak_slot)(lcg_ref)
     let final_seed = lcg_ref.seed()
     assert_eq(result, expected_result)
     assert_eq(final_seed, expected_final_seed)

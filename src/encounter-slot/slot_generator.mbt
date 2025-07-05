@@ -1,146 +1,127 @@
 ///|
-pub fn select_standard_slot(
-  lcg_ref : @lcg32.Lcg32Ref,
+fn select_standard_slot(
   slots : Array[GBASlot],
   probabilities : Array[UInt]
-) -> GBASlot {
-  let random = lcg_ref.get_rand(m=100)
-  let mut cumulative = 0U
-  for i = 0; i < probabilities.length(); i = i + 1 {
-    cumulative = cumulative + probabilities[i]
-    if random < cumulative {
-      return slots[i]
+) -> @core.GeneratorMut[GBASlot] {
+  lcg_ref => {
+    let random = lcg_ref.get_rand(m=100)
+    let mut cumulative = 0U
+    for i = 0; i < probabilities.length(); i = i + 1 {
+      cumulative = cumulative + probabilities[i]
+      if random < cumulative {
+        return slots[i]
+      }
     }
+    slots[slots.length() - 1]
   }
-
-  // フォールバック（理論上は到達しない）
-  slots[slots.length() - 1]
 }
 
 // 草むらスロット選択（可変版）
 
 ///|
 pub fn generate_grass_slot_mut(
-  lcg_ref : @lcg32.Lcg32Ref,
   slots : Array[GBASlot]
-) -> GBASlot {
-  select_standard_slot(lcg_ref, slots, grass_probabilities)
+) -> @core.GeneratorMut[GBASlot] {
+  select_standard_slot(slots, grass_probabilities)
 }
 
 // 草むらスロット選択（不変版）
 
 ///|
 pub fn generate_grass_slot_immut(
-  lcg : @lcg32.Lcg32,
   slots : Array[GBASlot]
-) -> GBASlot {
-  let lcg_ref = lcg.to_ref()
-  generate_grass_slot_mut(lcg_ref, slots)
+) -> @core.Generator[GBASlot] {
+  lcg => generate_grass_slot_mut(slots)(lcg.to_ref())
 }
 
 // 水上スロット選択（可変版）
 
 ///|
 pub fn generate_surf_slot_mut(
-  lcg_ref : @lcg32.Lcg32Ref,
   slots : Array[GBASlot]
-) -> GBASlot {
-  select_standard_slot(lcg_ref, slots, surf_probabilities)
+) -> @core.GeneratorMut[GBASlot] {
+  select_standard_slot(slots, surf_probabilities)
 }
 
 // 水上スロット選択（不変版）
 
 ///|
 pub fn generate_surf_slot_immut(
-  lcg : @lcg32.Lcg32,
   slots : Array[GBASlot]
-) -> GBASlot {
-  let lcg_ref = lcg.to_ref()
-  generate_surf_slot_mut(lcg_ref, slots)
+) -> @core.Generator[GBASlot] {
+  lcg => generate_surf_slot_mut(slots)(lcg.to_ref())
 }
 
 // ボロの釣り竿スロット選択（可変版）
 
 ///|
 pub fn generate_old_rod_slot_mut(
-  lcg_ref : @lcg32.Lcg32Ref,
   slots : Array[GBASlot]
-) -> GBASlot {
-  select_standard_slot(lcg_ref, slots, old_rod_probabilities)
+) -> @core.GeneratorMut[GBASlot] {
+  select_standard_slot(slots, old_rod_probabilities)
 }
 
 // ボロの釣り竿スロット選択（不変版）
 
 ///|
 pub fn generate_old_rod_slot_immut(
-  lcg : @lcg32.Lcg32,
   slots : Array[GBASlot]
-) -> GBASlot {
-  let lcg_ref = lcg.to_ref()
-  generate_old_rod_slot_mut(lcg_ref, slots)
+) -> @core.Generator[GBASlot] {
+  lcg => generate_old_rod_slot_mut(slots)(lcg.to_ref())
 }
 
 // いい釣り竿スロット選択（可変版）
 
 ///|
 pub fn generate_good_rod_slot_mut(
-  lcg_ref : @lcg32.Lcg32Ref,
   slots : Array[GBASlot]
-) -> GBASlot {
-  select_standard_slot(lcg_ref, slots, good_rod_probabilities)
+) -> @core.GeneratorMut[GBASlot] {
+  select_standard_slot(slots, good_rod_probabilities)
 }
 
 // いい釣り竿スロット選択（不変版）
 
 ///|
 pub fn generate_good_rod_slot_immut(
-  lcg : @lcg32.Lcg32,
   slots : Array[GBASlot]
-) -> GBASlot {
-  let lcg_ref = lcg.to_ref()
-  generate_good_rod_slot_mut(lcg_ref, slots)
+) -> @core.Generator[GBASlot] {
+  lcg => generate_good_rod_slot_mut(slots)(lcg.to_ref())
 }
 
 // すごい釣り竿スロット選択（可変版）
 
 ///|
 pub fn generate_super_rod_slot_mut(
-  lcg_ref : @lcg32.Lcg32Ref,
   slots : Array[GBASlot]
-) -> GBASlot {
-  select_standard_slot(lcg_ref, slots, super_rod_probabilities)
+) -> @core.GeneratorMut[GBASlot] {
+  select_standard_slot(slots, super_rod_probabilities)
 }
 
 // すごい釣り竿スロット選択（不変版）
 
 ///|
 pub fn generate_super_rod_slot_immut(
-  lcg : @lcg32.Lcg32,
   slots : Array[GBASlot]
-) -> GBASlot {
-  let lcg_ref = lcg.to_ref()
-  generate_super_rod_slot_mut(lcg_ref, slots)
+) -> @core.Generator[GBASlot] {
+  lcg => generate_super_rod_slot_mut(slots)(lcg.to_ref())
 }
 
 // 岩砕きスロット選択（可変版）
 
 ///|
 pub fn generate_rock_smash_slot_mut(
-  lcg_ref : @lcg32.Lcg32Ref,
   slots : Array[GBASlot]
-) -> GBASlot {
-  select_standard_slot(lcg_ref, slots, rock_smash_probabilities)
+) -> @core.GeneratorMut[GBASlot] {
+  select_standard_slot(slots, rock_smash_probabilities)
 }
 
 // 岩砕きスロット選択（不変版）
 
 ///|
 pub fn generate_rock_smash_slot_immut(
-  lcg : @lcg32.Lcg32,
   slots : Array[GBASlot]
-) -> GBASlot {
-  let lcg_ref = lcg.to_ref()
-  generate_rock_smash_slot_mut(lcg_ref, slots)
+) -> @core.Generator[GBASlot] {
+  lcg => generate_rock_smash_slot_mut(slots)(lcg.to_ref())
 }
 
 // テスト
@@ -177,7 +158,7 @@ test "grass slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_grass_slot_immut(@lcg32.Lcg32(seed), slots)
+    let result = generate_grass_slot_immut(slots)(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -199,7 +180,7 @@ test "surf slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_surf_slot_immut(@lcg32.Lcg32(seed), slots)
+    let result = generate_surf_slot_immut(slots)(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -221,7 +202,7 @@ test "old rod slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_old_rod_slot_immut(@lcg32.Lcg32(seed), slots)
+    let result = generate_old_rod_slot_immut(slots)(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -243,7 +224,7 @@ test "good rod slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_good_rod_slot_immut(@lcg32.Lcg32(seed), slots)
+    let result = generate_good_rod_slot_immut(slots)(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -265,7 +246,7 @@ test "super rod slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_super_rod_slot_immut(@lcg32.Lcg32(seed), slots)
+    let result = generate_super_rod_slot_immut(slots)(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -287,9 +268,7 @@ test "rock smash slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_rock_smash_slot_immut(@lcg32.Lcg32(seed), slots)
+    let result = generate_rock_smash_slot_immut(slots)(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
-
-///|

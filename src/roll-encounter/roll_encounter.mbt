@@ -2,7 +2,7 @@
 pub fn roll_encounter_rse_mut(
   base_encounter_rate : UInt,
   option~ : EncounterOption? = None
-) -> RollEncounterMut {
+) -> @core.GeneratorMut[Bool] {
   lcg_ref => {
     let encounter_rate = compute_encounter_rate(base_encounter_rate, option~)
     let random = lcg_ref.get_rand(m=2880)
@@ -14,7 +14,7 @@ pub fn roll_encounter_rse_mut(
 pub fn roll_encounter_rse_immut(
   base_encounter_rate : UInt,
   option~ : EncounterOption? = None
-) -> RollEncounterImmut {
+) -> @core.Generator[Bool] {
   lcg => roll_encounter_rse_mut(base_encounter_rate, option~)(lcg.to_ref())
 }
 

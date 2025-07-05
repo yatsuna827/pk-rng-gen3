@@ -19,9 +19,3 @@ pub fn EncounterOption::new(
 ) -> EncounterOption {
   { riding_bicycle, flute, has_cleanse_tag }
 }
-
-///|
-pub typealias (@lcg32.Lcg32) -> Bool as RollEncounterImmut
-
-///|
-pub typealias (@lcg32.Lcg32Ref) -> Bool as RollEncounterMut

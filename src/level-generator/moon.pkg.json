@@ -1,8 +1,5 @@
 {
   "import": [
-    {
-      "path": "yatsuna_827/pk-rng-gen3/lcg32",
-      "alias": "lcg32"
-    }
+    "yatsuna_827/pk-rng-gen3/lcg32"
   ]
 }
