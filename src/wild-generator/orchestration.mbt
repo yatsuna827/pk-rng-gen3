@@ -81,12 +81,7 @@ test "wild pokemon generation matches C# implementation" {
   assert_eq(pokemon1.level, 12U)
   assert_eq(pokemon1.pid, 0xB22F82C3U)
   assert_eq(pokemon1.nature, @types.Nature::Modest)
-  assert_eq(pokemon1.ivs.h(), 7U)
-  assert_eq(pokemon1.ivs.a(), 25U)
-  assert_eq(pokemon1.ivs.b(), 3U)
-  assert_eq(pokemon1.ivs.c(), 5U)
-  assert_eq(pokemon1.ivs.d(), 9U)
-  assert_eq(pokemon1.ivs.s(), 26U)
+  assert_eq(pokemon1.ivs.as_tuple(), (7, 25, 3, 5, 9, 26))
 
   // C#実装結果: Seed: 87654321, Pokemon: ポチエナ, Lv=12, PID=C71E3720, Nature=Lonely, IVs=[10,13,14,19,12,15]
   let result2 = generate_wild_pokemon_immut(
@@ -101,10 +96,5 @@ test "wild pokemon generation matches C# implementation" {
   assert_eq(pokemon2.level, 12U)
   assert_eq(pokemon2.pid, 0xC71E3720U)
   assert_eq(pokemon2.nature, @types.Nature::Lonely)
-  assert_eq(pokemon2.ivs.h(), 10U)
-  assert_eq(pokemon2.ivs.a(), 13U)
-  assert_eq(pokemon2.ivs.b(), 14U)
-  assert_eq(pokemon2.ivs.c(), 19U)
-  assert_eq(pokemon2.ivs.d(), 12U)
-  assert_eq(pokemon2.ivs.s(), 15U)
+  assert_eq(pokemon2.ivs.as_tuple(), (10, 13, 14, 19, 12, 15))
 }

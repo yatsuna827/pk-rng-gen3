@@ -29,7 +29,7 @@ pub fn generate_level_pressure_mut(
 }
 
 ///|
-test "should match C# implementation output" {
+test "should match C# implementation" {
   let lcg = @lcg32.Lcg32(0x12345678U)
   let level = generate_level_pressure_immut(lcg, 20U, 5U)
   assert_eq(level, 24U)
@@ -69,7 +69,7 @@ test "panic variable_lv is 0 mut" {
 }
 
 ///|
-test "should match C# implementation with various inputs" {
+test "should match C# implementation" {
   let test_cases = [
     (0x10000000U, 20U, 5U, 24U),
     (0x22222222U, 20U, 5U, 24U),

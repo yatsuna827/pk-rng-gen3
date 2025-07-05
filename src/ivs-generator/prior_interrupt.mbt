@@ -2,71 +2,38 @@
 
 ///|
 pub fn generate_ivs_prior_interrupt_immut(lcg : @lcg32.Lcg32) -> @types.IVs {
-  let lcg_ref = lcg.to_ref()
-  lcg_ref.advance() // 1回進める
-  let hab = lcg_ref.get_rand()
-  let scd = lcg_ref.get_rand()
-  @types.IVs::new(
-    hab & 0x1f,
-    (hab >> 5) & 0x1f,
-    (hab >> 10) & 0x1f,
-    (scd >> 5) & 0x1f,
-    (scd >> 10) & 0x1f,
-    scd & 0x1f,
-  )
+  generate_ivs_prior_interrupt_mut(lcg.to_ref())
 }
 
 ///|
 pub fn generate_ivs_prior_interrupt_mut(
   lcg_ref : @lcg32.Lcg32Ref
 ) -> @types.IVs {
-  lcg_ref.advance() // 1回進める
+  lcg_ref.advance()
   let hab = lcg_ref.get_rand()
   let scd = lcg_ref.get_rand()
-  @types.IVs::new(
-    hab & 0x1f,
-    (hab >> 5) & 0x1f,
-    (hab >> 10) & 0x1f,
-    (scd >> 5) & 0x1f,
-    (scd >> 10) & 0x1f,
-    scd & 0x1f,
-  )
+  @types.IVs::from_code(hab, scd)
 }
 
 ///|
 test "generate_ivs_prior_interrupt should advance correctly" {
   let initial_seed = 0x12345678U
   let lcg_ref = @lcg32.Lcg32(initial_seed).to_ref()
-
-  // 手動で3回進める（advance + hab + scd）
-  lcg_ref.advance()
-  lcg_ref.advance()
-  lcg_ref.advance()
-  let expected = lcg_ref.seed()
-
-  // 改めて同じ初期状態でテスト
-  let lcg_ref2 = @lcg32.Lcg32(initial_seed).to_ref()
-  let _ivs = generate_ivs_prior_interrupt_mut(lcg_ref2)
-  assert_eq(lcg_ref2.seed(), expected)
+  let _ = generate_ivs_prior_interrupt_mut(lcg_ref)
+  assert_eq(lcg_ref.get_index(from=initial_seed), 3)
 }
 
 ///|
-test "prior_interrupt should produce expected values for seed 0x12345678" {
-  let lcg = @lcg32.Lcg32(0x12345678U)
-  let ivs = generate_ivs_prior_interrupt_immut(lcg)
-  assert_eq(ivs.h(), 10)
-  assert_eq(ivs.a(), 7)
-  assert_eq(ivs.b(), 1)
-  assert_eq(ivs.c(), 12)
-  assert_eq(ivs.d(), 22)
-  assert_eq(ivs.s(), 10)
-}
-
-///|
-test "prior_interrupt final seed should be 0xD98A7B6D" {
-  let lcg_ref = @lcg32.Lcg32(0x12345678U).to_ref()
-  let _ivs = generate_ivs_prior_interrupt_mut(lcg_ref)
-  assert_eq(lcg_ref.seed(), 0xD98A7B6DU)
+test "should match C# implementation" {
+  let test_cases : Array[(@lcg32.Lcg32, (UInt, UInt, UInt, UInt, UInt, UInt))] = [
+    (@lcg32.Lcg32(0x00000001U), (1, 1, 11, 23, 20, 14)),
+    (@lcg32.Lcg32(0x12345678U), (10, 7, 1, 12, 22, 10)),
+  ]
+  for test_case in test_cases {
+    let (lcg, expected) = test_case
+    let ivs = generate_ivs_prior_interrupt_immut(lcg)
+    assert_eq(ivs.as_tuple(), expected)
+  }
 }
 
 ///|
@@ -76,10 +43,5 @@ test "prior_interrupt immut and mut versions should produce same result" {
   let ivs_immut = generate_ivs_prior_interrupt_immut(lcg)
   let lcg_ref = @lcg32.Lcg32(seed).to_ref()
   let ivs_mut = generate_ivs_prior_interrupt_mut(lcg_ref)
-  assert_eq(ivs_immut.h(), ivs_mut.h())
-  assert_eq(ivs_immut.a(), ivs_mut.a())
-  assert_eq(ivs_immut.b(), ivs_mut.b())
-  assert_eq(ivs_immut.c(), ivs_mut.c())
-  assert_eq(ivs_immut.d(), ivs_mut.d())
-  assert_eq(ivs_immut.s(), ivs_mut.s())
+  assert_eq(ivs_immut, ivs_mut)
 }

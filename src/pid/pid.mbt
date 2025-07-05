@@ -74,7 +74,6 @@ test "generate_pid_with_conditions should generate PID matching required nature"
     None,
     @types.GenderRatio::Genderless,
   )
-
   assert_eq(pid.to_nature(), required_nature)
 }
 
@@ -89,7 +88,6 @@ test "generate_pid_with_conditions should generate PID matching required gender"
     Some(required_gender),
     gender_ratio,
   )
-
   assert_eq(pid.to_gender(gender_ratio), required_gender)
 }
 
@@ -120,7 +118,6 @@ test "generate_pid_with_conditions should work with no constraints" {
     None,
     @types.GenderRatio::Genderless,
   )
-
   assert_eq(pid.inner(), generate_pid(lcg.to_ref()).inner())
 }
 
@@ -134,7 +131,6 @@ test "generate_pid_with_conditions should handle genderless pokemon" {
     None,
     @types.GenderRatio::Genderless,
   )
-
   assert_eq(pid.to_nature(), required_nature)
 
   // Gender should always be genderless for genderless species

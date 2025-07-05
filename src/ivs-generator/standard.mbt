@@ -1,75 +1,41 @@
 ///|
 pub fn generate_ivs_standard_immut(lcg : @lcg32.Lcg32) -> @types.IVs {
-  let lcg_ref = lcg.to_ref()
-  let hab = lcg_ref.get_rand()
-  let scd = lcg_ref.get_rand()
-  @types.IVs::new(
-    hab & 0x1f,
-    (hab >> 5) & 0x1f,
-    (hab >> 10) & 0x1f,
-    (scd >> 5) & 0x1f,
-    (scd >> 10) & 0x1f,
-    scd & 0x1f,
-  )
+  generate_ivs_standard_mut(lcg.to_ref())
 }
 
 ///|
 pub fn generate_ivs_standard_mut(lcg_ref : @lcg32.Lcg32Ref) -> @types.IVs {
   let hab = lcg_ref.get_rand()
   let scd = lcg_ref.get_rand()
-  @types.IVs::new(
-    hab & 0x1f,
-    (hab >> 5) & 0x1f,
-    (hab >> 10) & 0x1f,
-    (scd >> 5) & 0x1f,
-    (scd >> 10) & 0x1f,
-    scd & 0x1f,
-  )
+  @types.IVs::from_code(hab, scd)
 }
 
 ///|
 test "generate_ivs_standard_mut should advance LCG state correctly" {
   let initial_seed = 0x12345678U
   let lcg_ref = @lcg32.Lcg32(initial_seed).to_ref()
-  let _ivs = generate_ivs_standard_mut(lcg_ref)
-  assert_eq(lcg_ref.seed(), 0x84EA22A2U)
+  let _ = generate_ivs_standard_mut(lcg_ref)
+  assert_eq(lcg_ref.get_index(from=initial_seed), 2)
 }
 
 ///|
-test "standard should produce expected values for seed 0x12345678" {
-  let lcg = @lcg32.Lcg32(0x12345678U)
-  let ivs = generate_ivs_standard_immut(lcg)
-  assert_eq(ivs.h(), 17)
-  assert_eq(ivs.a(), 27)
-  assert_eq(ivs.b(), 2)
-  assert_eq(ivs.c(), 7)
-  assert_eq(ivs.d(), 1)
-  assert_eq(ivs.s(), 10)
-}
-
-///|
-test "should produce expected values for known seed" {
-  let lcg = @lcg32.Lcg32(0x00000001U)
-  let ivs = generate_ivs_standard_immut(lcg)
-  assert_eq(ivs.h(), 6)
-  assert_eq(ivs.a(), 14)
-  assert_eq(ivs.b(), 16)
-  assert_eq(ivs.c(), 1)
-  assert_eq(ivs.d(), 11)
-  assert_eq(ivs.s(), 1)
+test "should match C# implementation" {
+  let test_cases : Array[(@lcg32.Lcg32, (UInt, UInt, UInt, UInt, UInt, UInt))] = [
+    (@lcg32.Lcg32(0x00000001U), (6, 14, 16, 1, 11, 1)),
+    (@lcg32.Lcg32(0x12345678U), (17, 27, 2, 7, 1, 10)),
+  ]
+  for test_case in test_cases {
+    let (lcg, expected) = test_case
+    let ivs = generate_ivs_standard_immut(lcg)
+    assert_eq(ivs.as_tuple(), expected)
+  }
 }
 
 ///|
 test "immut and mut versions should produce same result" {
-  let seed : UInt = 0x00000001U
-  let lcg = @lcg32.Lcg32(seed)
-  let ivs_immut = generate_ivs_standard_immut(lcg)
-  let lcg_ref = @lcg32.Lcg32(seed).to_ref()
-  let ivs_mut = generate_ivs_standard_mut(lcg_ref)
-  assert_eq(ivs_immut.h(), ivs_mut.h())
-  assert_eq(ivs_immut.a(), ivs_mut.a())
-  assert_eq(ivs_immut.b(), ivs_mut.b())
-  assert_eq(ivs_immut.c(), ivs_mut.c())
-  assert_eq(ivs_immut.d(), ivs_mut.d())
-  assert_eq(ivs_immut.s(), ivs_mut.s())
+  let lcg = @lcg32.Lcg32(0x00000001U)
+  assert_eq(
+    generate_ivs_standard_immut(lcg),
+    generate_ivs_standard_mut(lcg.to_ref()),
+  )
 }
