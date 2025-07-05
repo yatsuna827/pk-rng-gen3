@@ -194,9 +194,29 @@ C#版ライブラリと同一の初期シードおよび条件を与えた際に
 - ✅ 新しい型定義（GenderRatio, ShinyType）
 - ✅ 包括的テストスイート（90テスト全通過）
 
+#### EncounterSlot群 (`src/encounter-slot/`)
+- ✅ エンカウント判定基本型定義（types.mbt）
+- ✅ RSEEncounterDrawer実装（encounter_drawer.mbt）
+- ✅ FRLGEncounterDrawer実装（encounter_drawer.mbt）
+- ✅ ForceEncounterDrawer実装（encounter_drawer.mbt）
+- ✅ スロット選択システム実装（slot_generator.mbt）
+- ✅ 特殊スロット生成器実装（special_slot_generator.mbt）
+- ✅ C#実装結果を用いた互換性テスト
+- ✅ t-wada TDD基準でのテストレビュー・修正完了
+- ✅ Flute型の正しい設計修正（Option型使用）
+- ✅ 意味のないテストの削除とテスト品質向上
+
+#### WildGenerator群 (`src/wild-generator/`)
+- ✅ オーケストレーション関数実装（orchestration.mbt）
+- ✅ 野生ポケモン生成システム統合
+- ✅ 関数型アプローチによる設計
+- ✅ 不変版から可変版へのアダプタ関数
+
 ### 現在の状況
-IVsGenerator群（5種類）、NatureGenerator群（5種類）、LevelGenerator群（3種類）、GenderGenerator群（3種類）、PIDモジュールが完了。全90テストが通過し、C#実装との完全互換性を確保。現在EncounterSlot実装中。
+全主要モジュール実装完了：IVsGenerator群（5種類）、NatureGenerator群（5種類）、LevelGenerator群（3種類）、GenderGenerator群（3種類）、PIDモジュール、EncounterSlot群、WildGeneratorオーケストレーション。基本的な実装とテストは完了。
 
 ### 次のステップ
-1. **高優先度**: 残りのGenerator群実装（PID, EncounterSlot）
-2. **中優先度**: オーケストレーション関数実装（create_wild_pokemon_generator）
+1. **最高優先度**: slot_generatorのcreate_test_slots関数とテストを修正（偽陽性テストの解消）
+2. **高優先度**: 統合テストの拡充
+3. **中優先度**: ドキュメント整備
+4. **将来の改善**: GBASlotにポケモンタイプ情報を追加し、Attract系特性用のスロットフィルタリング機能を実装
