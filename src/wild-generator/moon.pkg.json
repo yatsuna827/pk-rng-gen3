@@ -7,6 +7,10 @@
       "alias": "encounter_slot"
     },
     {
+      "path": "yatsuna_827/pk-rng-gen3/roll-encounter",
+      "alias": "roll_encounter"
+    },
+    {
       "path": "yatsuna_827/pk-rng-gen3/level-generator",
       "alias": "level_generator"
     },

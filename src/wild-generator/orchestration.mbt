@@ -2,7 +2,7 @@
 pub fn generate_wild_pokemon_mut(
   lcg_ref : @lcg32.Lcg32Ref,
   slots : Array[@encounter_slot.GBASlot],
-  encounter_fn : @encounter_slot.EncounterDrawerMut,
+  encounter_fn : @roll_encounter.RollEncounterMut,
   slot_func : (@lcg32.Lcg32Ref, Array[@encounter_slot.GBASlot]) -> @encounter_slot.GBASlot,
   level_func : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
   ivs_func : (@lcg32.Lcg32Ref) -> @types.IVs,
@@ -40,7 +40,7 @@ pub fn generate_wild_pokemon_mut(
 pub fn generate_wild_pokemon_immut(
   lcg : @lcg32.Lcg32,
   slots : Array[@encounter_slot.GBASlot],
-  encounter_fn : @encounter_slot.EncounterDrawerMut,
+  encounter_fn : @roll_encounter.RollEncounterMut,
   slot_func : (@lcg32.Lcg32Ref, Array[@encounter_slot.GBASlot]) -> @encounter_slot.GBASlot,
   level_func : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
   ivs_func : (@lcg32.Lcg32Ref) -> @types.IVs,
@@ -75,7 +75,7 @@ test "wild pokemon generation matches C# implementation" {
   let result1 = generate_wild_pokemon_immut(
     @lcg32.Lcg32(0x12345678U),
     slots,
-    @encounter_slot.draw_encounter_force_mut,
+    @roll_encounter.roll_encounter_force_mut,
     @encounter_slot.generate_grass_slot_mut,
     @level_generator.generate_level_standard_mut,
     @ivs_generator.generate_ivs_standard_mut,
@@ -97,7 +97,7 @@ test "wild pokemon generation matches C# implementation" {
   let result2 = generate_wild_pokemon_immut(
     @lcg32.Lcg32(0x87654321U),
     slots,
-    @encounter_slot.draw_encounter_force_mut,
+    @roll_encounter.roll_encounter_force_mut,
     @encounter_slot.generate_grass_slot_mut,
     @level_generator.generate_level_standard_mut,
     @ivs_generator.generate_ivs_standard_mut,
