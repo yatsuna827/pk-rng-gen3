@@ -1,5 +1,3 @@
-// スロット選択システム実装
-
 // 確率分布テーブル
 
 ///|
@@ -21,8 +19,6 @@ let super_rod_probabilities : Array[UInt] = [40, 40, 15, 4, 1]
 
 ///|
 let rock_smash_probabilities : Array[UInt] = [60, 30, 5, 4, 1] // 水上と同じ
-
-// 標準テーブルからスロット選択
 
 ///|
 pub fn select_standard_slot(
