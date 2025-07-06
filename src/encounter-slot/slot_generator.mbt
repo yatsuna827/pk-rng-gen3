@@ -1,130 +1,12 @@
 ///|
-fn select_standard_slot(
-  slots : Array[GBASlot],
-  probabilities : Array[UInt]
-) -> @core.GeneratorMut[GBASlot] {
-  lcg_ref => {
-    let random = lcg_ref.get_rand(m=100)
-    let mut cumulative = 0U
-    for i = 0; i < probabilities.length(); i = i + 1 {
-      cumulative = cumulative + probabilities[i]
-      if random < cumulative {
-        return slots[i]
-      }
-    }
-    slots[slots.length() - 1]
-  }
+pub fn generate_slot_mut(table : EncounterTable) -> @core.GeneratorMut[GBASlot] {
+  lcg_ref => table.pick(lcg_ref.get_rand(m=100))
 }
-
-// 草むらスロット選択（可変版）
 
 ///|
-pub fn generate_grass_slot_mut(
-  slots : Array[GBASlot]
-) -> @core.GeneratorMut[GBASlot] {
-  select_standard_slot(slots, grass_probabilities)
+pub fn generate_slot_immut(table : EncounterTable) -> @core.Generator[GBASlot] {
+  lcg => generate_slot_mut(table)(lcg.to_ref())
 }
-
-// 草むらスロット選択（不変版）
-
-///|
-pub fn generate_grass_slot_immut(
-  slots : Array[GBASlot]
-) -> @core.Generator[GBASlot] {
-  lcg => generate_grass_slot_mut(slots)(lcg.to_ref())
-}
-
-// 水上スロット選択（可変版）
-
-///|
-pub fn generate_surf_slot_mut(
-  slots : Array[GBASlot]
-) -> @core.GeneratorMut[GBASlot] {
-  select_standard_slot(slots, surf_probabilities)
-}
-
-// 水上スロット選択（不変版）
-
-///|
-pub fn generate_surf_slot_immut(
-  slots : Array[GBASlot]
-) -> @core.Generator[GBASlot] {
-  lcg => generate_surf_slot_mut(slots)(lcg.to_ref())
-}
-
-// ボロの釣り竿スロット選択（可変版）
-
-///|
-pub fn generate_old_rod_slot_mut(
-  slots : Array[GBASlot]
-) -> @core.GeneratorMut[GBASlot] {
-  select_standard_slot(slots, old_rod_probabilities)
-}
-
-// ボロの釣り竿スロット選択（不変版）
-
-///|
-pub fn generate_old_rod_slot_immut(
-  slots : Array[GBASlot]
-) -> @core.Generator[GBASlot] {
-  lcg => generate_old_rod_slot_mut(slots)(lcg.to_ref())
-}
-
-// いい釣り竿スロット選択（可変版）
-
-///|
-pub fn generate_good_rod_slot_mut(
-  slots : Array[GBASlot]
-) -> @core.GeneratorMut[GBASlot] {
-  select_standard_slot(slots, good_rod_probabilities)
-}
-
-// いい釣り竿スロット選択（不変版）
-
-///|
-pub fn generate_good_rod_slot_immut(
-  slots : Array[GBASlot]
-) -> @core.Generator[GBASlot] {
-  lcg => generate_good_rod_slot_mut(slots)(lcg.to_ref())
-}
-
-// すごい釣り竿スロット選択（可変版）
-
-///|
-pub fn generate_super_rod_slot_mut(
-  slots : Array[GBASlot]
-) -> @core.GeneratorMut[GBASlot] {
-  select_standard_slot(slots, super_rod_probabilities)
-}
-
-// すごい釣り竿スロット選択（不変版）
-
-///|
-pub fn generate_super_rod_slot_immut(
-  slots : Array[GBASlot]
-) -> @core.Generator[GBASlot] {
-  lcg => generate_super_rod_slot_mut(slots)(lcg.to_ref())
-}
-
-// 岩砕きスロット選択（可変版）
-
-///|
-pub fn generate_rock_smash_slot_mut(
-  slots : Array[GBASlot]
-) -> @core.GeneratorMut[GBASlot] {
-  select_standard_slot(slots, rock_smash_probabilities)
-}
-
-// 岩砕きスロット選択（不変版）
-
-///|
-pub fn generate_rock_smash_slot_immut(
-  slots : Array[GBASlot]
-) -> @core.Generator[GBASlot] {
-  lcg => generate_rock_smash_slot_mut(slots)(lcg.to_ref())
-}
-
-// テスト
 
 ///|
 fn create_test_slots(count : Int) -> Array[GBASlot] {
@@ -134,16 +16,16 @@ fn create_test_slots(count : Int) -> Array[GBASlot] {
     max_level: 10,
   })
   for i = 0; i < count; i = i + 1 {
-    slots[i] = GBASlot::{ pokemon_id: 0, min_level: 5, max_level: 10 }
+    slots[i] = GBASlot::{ pokemon_id: i, min_level: 5, max_level: 10 }
   }
   slots
 }
 
-// C#実装との互換性テスト
-
 ///|
 test "grass slot selection matches C# implementation" {
   let slots = create_test_slots(12)
+  let table = EncounterTable::grass(slots)
+  let generate = generate_slot_immut(table)
   let test_cases = [
     (0x12345678U, 1),
     (0x87654321U, 0),
@@ -158,7 +40,7 @@ test "grass slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_grass_slot_immut(slots)(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -166,6 +48,8 @@ test "grass slot selection matches C# implementation" {
 ///|
 test "surf slot selection matches C# implementation" {
   let slots = create_test_slots(5)
+  let table = EncounterTable::surf(slots)
+  let generate = generate_slot_immut(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -180,7 +64,7 @@ test "surf slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_surf_slot_immut(slots)(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -188,6 +72,8 @@ test "surf slot selection matches C# implementation" {
 ///|
 test "old rod slot selection matches C# implementation" {
   let slots = create_test_slots(2)
+  let table = EncounterTable::old_rod(slots)
+  let generate = generate_slot_immut(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -202,7 +88,7 @@ test "old rod slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_old_rod_slot_immut(slots)(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -210,6 +96,8 @@ test "old rod slot selection matches C# implementation" {
 ///|
 test "good rod slot selection matches C# implementation" {
   let slots = create_test_slots(3)
+  let table = EncounterTable::good_rod(slots)
+  let generate = generate_slot_immut(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -224,7 +112,7 @@ test "good rod slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_good_rod_slot_immut(slots)(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -232,6 +120,8 @@ test "good rod slot selection matches C# implementation" {
 ///|
 test "super rod slot selection matches C# implementation" {
   let slots = create_test_slots(5)
+  let table = EncounterTable::super_rod(slots)
+  let generate = generate_slot_immut(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -246,7 +136,7 @@ test "super rod slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_super_rod_slot_immut(slots)(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -254,6 +144,8 @@ test "super rod slot selection matches C# implementation" {
 ///|
 test "rock smash slot selection matches C# implementation" {
   let slots = create_test_slots(5)
+  let table = EncounterTable::rock_smash(slots)
+  let generate = generate_slot_immut(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -268,7 +160,7 @@ test "rock smash slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate_rock_smash_slot_immut(slots)(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed))
     assert_eq(result, slots[expected_slot_index])
   }
 }

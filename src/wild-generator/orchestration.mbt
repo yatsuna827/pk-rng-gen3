@@ -75,7 +75,9 @@ test "wild pokemon generation matches C# implementation" {
   ]
   let generate = generate_wild_pokemon_immut(
     encounter_fn=@roll_encounter.roll_encounter_force_mut,
-    slot_fn=@encounter_slot.generate_grass_slot_mut(slots),
+    slot_fn=@encounter_slot.generate_slot_mut(
+      @encounter_slot.EncounterTable::grass(slots),
+    ),
     level_fn=@level_generator.generate_level_standard_mut,
     ivs_fn=@ivs_generator.generate_ivs_standard_mut,
     nature_fn=@nature_generator.generate_nature_standard_mut,
