@@ -17,7 +17,7 @@ pub fn PokeBlock::new(flavor : PokeBlockFlavor) -> PokeBlock {
   { flavor, }
 }
 
-///| 指定された性格がこのポロックを好むか判定
+///|
 pub fn PokeBlock::is_liked_by(self : PokeBlock, nature : Nature) -> Bool {
   match self.flavor {
     Spicy =>
