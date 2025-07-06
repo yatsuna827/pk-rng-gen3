@@ -28,34 +28,34 @@ pub(all) enum Nature {
 } derive(Eq, Show)
 
 ///| 整数値からNatureを作成（0-24の範囲）
-pub fn Nature::from_value(value : UInt) -> Nature? {
+pub fn Nature::from_value(value : UInt) -> Nature {
   match value {
-    0 => Some(Hardy)
-    1 => Some(Lonely)
-    2 => Some(Brave)
-    3 => Some(Adamant)
-    4 => Some(Naughty)
-    5 => Some(Bold)
-    6 => Some(Docile)
-    7 => Some(Relaxed)
-    8 => Some(Impish)
-    9 => Some(Lax)
-    10 => Some(Timid)
-    11 => Some(Hasty)
-    12 => Some(Serious)
-    13 => Some(Jolly)
-    14 => Some(Naive)
-    15 => Some(Modest)
-    16 => Some(Mild)
-    17 => Some(Quiet)
-    18 => Some(Bashful)
-    19 => Some(Rash)
-    20 => Some(Calm)
-    21 => Some(Gentle)
-    22 => Some(Sassy)
-    23 => Some(Careful)
-    24 => Some(Quirky)
-    _ => None
+    0 => Hardy
+    1 => Lonely
+    2 => Brave
+    3 => Adamant
+    4 => Naughty
+    5 => Bold
+    6 => Docile
+    7 => Relaxed
+    8 => Impish
+    9 => Lax
+    10 => Timid
+    11 => Hasty
+    12 => Serious
+    13 => Jolly
+    14 => Naive
+    15 => Modest
+    16 => Mild
+    17 => Quiet
+    18 => Bashful
+    19 => Rash
+    20 => Calm
+    21 => Gentle
+    22 => Sassy
+    23 => Careful
+    24 => Quirky
+    _ => panic()
   }
 }
 

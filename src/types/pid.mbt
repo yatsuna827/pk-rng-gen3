@@ -3,7 +3,7 @@ pub(all) type PID UInt
 
 ///|
 pub fn PID::to_nature(self : PID) -> Nature {
-  Nature::from_value(self.inner() % 25).unwrap()
+  Nature::from_value(self.inner() % 25)
 }
 
 ///|
