@@ -1,59 +1,36 @@
 ///|
 pub fn generate_gender_cute_charm_immut(
-  lcg : @lcg32.Lcg32,
   cute_charm_gender : @types.Gender
-) -> @types.Gender {
-  let lcg_ref = lcg.to_ref()
-  generate_gender_cute_charm_mut(lcg_ref, cute_charm_gender)
+) -> @core.Generator[@types.Gender] {
+  lcg => generate_gender_cute_charm_mut(cute_charm_gender)(lcg.to_ref())
 }
 
 ///|
 pub fn generate_gender_cute_charm_mut(
-  lcg_ref : @lcg32.Lcg32Ref,
   cute_charm_gender : @types.Gender
-) -> @types.Gender {
-  if cute_charm_gender == @types.Genderless {
-    return @types.Genderless
+) -> @core.GeneratorMut[@types.Gender] {
+  lcg_ref => {
+    if cute_charm_gender == @types.Genderless {
+      return @types.Genderless
+    }
+    if lcg_ref.get_rand(m=3) != 0 {
+      cute_charm_gender.reverse()
+    } else {
+      @types.Genderless
+    }
   }
-  if lcg_ref.get_rand(m=3) != 0 {
-    cute_charm_gender.reverse()
-  } else {
-    @types.Genderless
-  }
-}
-
-///|
-test "cute charm returns Genderless when RNG result is 0" {
-  let lcg_ref = @lcg32.Lcg32(0x00000000U).to_ref()
-  let gender = generate_gender_cute_charm_mut(lcg_ref, @types.Male)
-  assert_eq(gender, @types.Genderless)
-}
-
-///|
-test "cute charm returns opposite gender for Male charm" {
-  let lcg_ref = @lcg32.Lcg32(0x00000001U).to_ref()
-  let gender = generate_gender_cute_charm_mut(lcg_ref, @types.Male)
-  assert_eq(gender, @types.Female)
-}
-
-///|
-test "cute charm returns opposite gender for Female charm" {
-  let lcg_ref = @lcg32.Lcg32(0x00000001U).to_ref()
-  let gender = generate_gender_cute_charm_mut(lcg_ref, @types.Female)
-  assert_eq(gender, @types.Male)
 }
 
 ///|
 test "cute charm does not consume RNG for Genderless charm" {
   let lcg_ref = @lcg32.Lcg32(0x12345678U).to_ref()
   let initial_seed = lcg_ref.seed()
-  let gender = generate_gender_cute_charm_mut(lcg_ref, @types.Genderless)
-  assert_eq(gender, @types.Genderless)
+  let _ = generate_gender_cute_charm_mut(@types.Genderless)(lcg_ref)
   assert_eq(lcg_ref.seed(), initial_seed)
 }
 
 ///|
-test "cute charm matches C# implementation" {
+test "should match C# implementation" {
   let male_test_cases = [
     (0x00000000U, @types.Gender::Genderless),
     (0x00000001U, @types.Female),
@@ -69,7 +46,7 @@ test "cute charm matches C# implementation" {
   for test_case in male_test_cases {
     let (seed, expected) = test_case
     let lcg = @lcg32.Lcg32(seed)
-    let result = generate_gender_cute_charm_immut(lcg, @types.Male)
+    let result = generate_gender_cute_charm_immut(@types.Male)(lcg)
     assert_eq(result, expected)
   }
   let female_test_cases = [
@@ -87,7 +64,7 @@ test "cute charm matches C# implementation" {
   for test_case in female_test_cases {
     let (seed, expected) = test_case
     let lcg = @lcg32.Lcg32(seed)
-    let result = generate_gender_cute_charm_immut(lcg, @types.Female)
+    let result = generate_gender_cute_charm_immut(@types.Female)(lcg)
     assert_eq(result, expected)
   }
 }

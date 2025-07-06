@@ -26,10 +26,6 @@
     {
       "path": "yatsuna_827/pk-rng-gen3/nature-generator",
       "alias": "nature_generator"
-    },
-    {
-      "path": "yatsuna_827/pk-rng-gen3/gender-generator",
-      "alias": "gender_generator"
     }
   ]
 }

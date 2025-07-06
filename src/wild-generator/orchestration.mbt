@@ -5,7 +5,7 @@ pub fn generate_wild_pokemon_mut(
   level_func : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
   ivs_func : (@lcg32.Lcg32Ref) -> @types.IVs,
   nature_func : (@lcg32.Lcg32Ref) -> @types.Nature,
-  gender_func : (@lcg32.Lcg32Ref) -> @types.Gender
+  gender_fn : @core.GeneratorMut[@types.Gender]?
 ) -> @core.GeneratorMut[@types.PokemonResult?] {
   lcg_ref => {
     if not(encounter_fn(lcg_ref)) {
@@ -16,12 +16,12 @@ pub fn generate_wild_pokemon_mut(
     let max_level = slot.max_level.reinterpret_as_uint()
     let variable_lv = max_level - min_level + 1U
     let level = level_func(lcg_ref, min_level, variable_lv)
-    let gender = gender_func(lcg_ref)
+    let gender = gender_fn.map(f => f(lcg_ref))
     let nature = nature_func(lcg_ref)
     let (pid, recalc_count) = @pid.generate_pid_with_conditions(
       lcg_ref,
       Some(nature),
-      None,
+      gender,
       @types.GenderRatio::Male1Female1,
     )
     let ivs = ivs_func(lcg_ref)
@@ -30,7 +30,7 @@ pub fn generate_wild_pokemon_mut(
       pid: pid.inner(),
       ivs,
       nature,
-      gender,
+      gender: pid.to_gender(@types.GenderRatio::Male1Female1),
       recalc_count,
     })
   }
@@ -43,10 +43,10 @@ pub fn generate_wild_pokemon_immut(
   level_func : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
   ivs_func : (@lcg32.Lcg32Ref) -> @types.IVs,
   nature_func : (@lcg32.Lcg32Ref) -> @types.Nature,
-  gender_func : (@lcg32.Lcg32Ref) -> @types.Gender
+  gender_fn : @core.GeneratorMut[@types.Gender]?
 ) -> @core.Generator[@types.PokemonResult?] {
   lcg => generate_wild_pokemon_mut(
-    encounter_fn, slot_func, level_func, ivs_func, nature_func, gender_func,
+    encounter_fn, slot_func, level_func, ivs_func, nature_func, gender_fn,
   )(lcg.to_ref())
 }
 
@@ -75,7 +75,7 @@ test "wild pokemon generation matches C# implementation" {
     @level_generator.generate_level_standard_mut,
     @ivs_generator.generate_ivs_standard_mut,
     @nature_generator.generate_nature_standard_mut,
-    @gender_generator.generate_gender_null_mut,
+    None,
   )(@lcg32.Lcg32(0x12345678U))
   let pokemon1 = result1.unwrap()
   assert_eq(pokemon1.level, 12U)
@@ -90,7 +90,7 @@ test "wild pokemon generation matches C# implementation" {
     @level_generator.generate_level_standard_mut,
     @ivs_generator.generate_ivs_standard_mut,
     @nature_generator.generate_nature_standard_mut,
-    @gender_generator.generate_gender_null_mut,
+    None,
   )(@lcg32.Lcg32(0x87654321U))
   let pokemon2 = result2.unwrap()
   assert_eq(pokemon2.level, 12U)
