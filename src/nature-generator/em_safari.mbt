@@ -23,9 +23,13 @@ pub fn generate_nature_em_safari_mut(
         if rand >= 80 {
           fallback(lcg_ref)
         } else {
-          let list = shuffle(lcg_ref)
-          let idx = list.search_by(n => block.is_liked_by(n)).unwrap()
-          list[idx]
+          for n in shuffle(lcg_ref) {
+            if block.is_liked_by(n) {
+              break n
+            }
+          } else {
+            panic()
+          }
         }
     }
   }
