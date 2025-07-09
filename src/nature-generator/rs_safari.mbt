@@ -1,22 +1,14 @@
 ///|
-pub fn generate_nature_rs_safari_immut(
-  pokeblock~ : @types.PokeBlock? = None
-) -> @core.Generator[@types.Nature] {
-  let generate = generate_nature_rs_safari_mut(pokeblock~)
-  lcg => generate(lcg.to_ref())
-}
-
-///|
-pub fn generate_nature_rs_safari_mut(
+pub fn generate_nature_rs_safari(
   pokeblock~ : @types.PokeBlock? = None
 ) -> @core.GeneratorMut[@types.Nature] {
   lcg_ref => {
     let rand = lcg_ref.get_rand(m=100)
     match pokeblock {
-      None => generate_nature_standard_mut(lcg_ref)
+      None => generate_nature_standard(lcg_ref)
       Some(block) =>
         if rand >= 80 {
-          generate_nature_standard_mut(lcg_ref)
+          generate_nature_standard(lcg_ref)
         } else {
           for n in shuffle(lcg_ref) {
             if block.is_liked_by(n) {
@@ -28,16 +20,6 @@ pub fn generate_nature_rs_safari_mut(
         }
     }
   }
-}
-
-///|
-test "produces same nature regardless of immutable or mutable usage" {
-  let pokeblock = Some(@types.PokeBlock::new(@types.Sweet))
-  let lcg = @lcg32.Lcg32(0x12345678U)
-  assert_eq(
-    generate_nature_rs_safari_immut(pokeblock~)(lcg),
-    generate_nature_rs_safari_mut(pokeblock~)(lcg.to_ref()),
-  )
 }
 
 ///|
@@ -66,7 +48,7 @@ test "C# compatibility" {
   for test_case in test_cases {
     let (lcg, pokeblock, expected_nature, expected_seed) = test_case
     let lcg_ref = lcg.to_ref()
-    let result = generate_nature_rs_safari_mut(pokeblock~)(lcg_ref)
+    let result = generate_nature_rs_safari(pokeblock~)(lcg_ref)
     assert_eq(result, expected_nature)
     assert_eq(lcg_ref.seed(), expected_seed)
   }

@@ -1,5 +1,5 @@
 ///| 
-pub fn generate_wild_pokemon_mut(
+pub fn generate_wild_pokemon(
   encounter_fn~ : @core.GeneratorMut[Bool],
   slot_fn~ : @core.GeneratorMut[@encounter_slot.GBASlot],
   level_fn~ : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
@@ -36,26 +36,6 @@ pub fn generate_wild_pokemon_mut(
   }
 }
 
-///| 
-pub fn generate_wild_pokemon_immut(
-  encounter_fn~ : @core.GeneratorMut[Bool],
-  slot_fn~ : @core.GeneratorMut[@encounter_slot.GBASlot],
-  level_fn~ : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
-  ivs_fn~ : @core.GeneratorMut[@types.IVs],
-  nature_fn~ : @core.GeneratorMut[@types.Nature],
-  gender_fn~ : @core.GeneratorMut[@types.Gender]? = None
-) -> @core.Generator[@types.PokemonResult?] {
-  let generate = generate_wild_pokemon_mut(
-    encounter_fn~,
-    slot_fn~,
-    level_fn~,
-    ivs_fn~,
-    nature_fn~,
-    gender_fn~,
-  )
-  lcg => generate(lcg.to_ref())
-}
-
 ///|
 test "wild pokemon generation matches C# implementation" {
   // C#実装と同じスロット構成（110番道路）
@@ -73,18 +53,18 @@ test "wild pokemon generation matches C# implementation" {
     @encounter_slot.GBASlot::{ pokemon_id: 311, min_level: 13, max_level: 13 }, // プラスル 1%
     @encounter_slot.GBASlot::{ pokemon_id: 312, min_level: 13, max_level: 13 }, // マイナン 1%
   ]
-  let generate = generate_wild_pokemon_immut(
-    encounter_fn=@roll_encounter.roll_encounter_force_mut,
-    slot_fn=@encounter_slot.generate_slot_mut(
+  let generate = generate_wild_pokemon(
+    encounter_fn=@roll_encounter.roll_encounter_force,
+    slot_fn=@encounter_slot.generate_slot(
       @encounter_slot.EncounterTable::grass(slots),
     ),
-    level_fn=@level_generator.generate_level_standard_mut,
-    ivs_fn=@ivs_generator.generate_ivs_standard_mut,
-    nature_fn=@nature_generator.generate_nature_standard_mut,
+    level_fn=@level_generator.generate_level_standard,
+    ivs_fn=@ivs_generator.generate_ivs_standard,
+    nature_fn=@nature_generator.generate_nature_standard,
   )
 
   // C#実装結果: Seed: 12345678, Pokemon: ラクライ, Lv=12, PID=B22F82C3, Nature=Modest, IVs=[7,25,3,5,9,26]
-  let result1 = generate(@lcg32.Lcg32(0x12345678U))
+  let result1 = generate(@lcg32.Lcg32(0x12345678U).to_ref())
   let pokemon1 = result1.unwrap()
   assert_eq(pokemon1.level, 12U)
   assert_eq(pokemon1.pid, 0xB22F82C3U)
@@ -92,7 +72,7 @@ test "wild pokemon generation matches C# implementation" {
   assert_eq(pokemon1.ivs.as_tuple(), (7, 25, 3, 5, 9, 26))
 
   // C#実装結果: Seed: 87654321, Pokemon: ポチエナ, Lv=12, PID=C71E3720, Nature=Lonely, IVs=[10,13,14,19,12,15]
-  let result2 = generate(@lcg32.Lcg32(0x87654321U))
+  let result2 = generate(@lcg32.Lcg32(0x87654321U).to_ref())
   let pokemon2 = result2.unwrap()
   assert_eq(pokemon2.level, 12U)
   assert_eq(pokemon2.pid, 0xC71E3720U)

@@ -1,11 +1,6 @@
 ///|
-pub fn generate_slot_mut(table : EncounterTable) -> @core.GeneratorMut[GBASlot] {
+pub fn generate_slot(table : EncounterTable) -> @core.GeneratorMut[GBASlot] {
   lcg_ref => table.pick(lcg_ref.get_rand(m=100))
-}
-
-///|
-pub fn generate_slot_immut(table : EncounterTable) -> @core.Generator[GBASlot] {
-  lcg => generate_slot_mut(table)(lcg.to_ref())
 }
 
 ///|
@@ -25,7 +20,7 @@ fn create_test_slots(count : Int) -> Array[GBASlot] {
 test "grass slot selection matches C# implementation" {
   let slots = create_test_slots(12)
   let table = EncounterTable::grass(slots)
-  let generate = generate_slot_immut(table)
+  let generate = generate_slot(table)
   let test_cases = [
     (0x12345678U, 1),
     (0x87654321U, 0),
@@ -40,7 +35,7 @@ test "grass slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed).to_ref())
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -49,7 +44,7 @@ test "grass slot selection matches C# implementation" {
 test "surf slot selection matches C# implementation" {
   let slots = create_test_slots(5)
   let table = EncounterTable::surf(slots)
-  let generate = generate_slot_immut(table)
+  let generate = generate_slot(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -64,7 +59,7 @@ test "surf slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed).to_ref())
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -73,7 +68,7 @@ test "surf slot selection matches C# implementation" {
 test "old rod slot selection matches C# implementation" {
   let slots = create_test_slots(2)
   let table = EncounterTable::old_rod(slots)
-  let generate = generate_slot_immut(table)
+  let generate = generate_slot(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -88,7 +83,7 @@ test "old rod slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed).to_ref())
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -97,7 +92,7 @@ test "old rod slot selection matches C# implementation" {
 test "good rod slot selection matches C# implementation" {
   let slots = create_test_slots(3)
   let table = EncounterTable::good_rod(slots)
-  let generate = generate_slot_immut(table)
+  let generate = generate_slot(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -112,7 +107,7 @@ test "good rod slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed).to_ref())
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -121,7 +116,7 @@ test "good rod slot selection matches C# implementation" {
 test "super rod slot selection matches C# implementation" {
   let slots = create_test_slots(5)
   let table = EncounterTable::super_rod(slots)
-  let generate = generate_slot_immut(table)
+  let generate = generate_slot(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -136,7 +131,7 @@ test "super rod slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed).to_ref())
     assert_eq(result, slots[expected_slot_index])
   }
 }
@@ -145,7 +140,7 @@ test "super rod slot selection matches C# implementation" {
 test "rock smash slot selection matches C# implementation" {
   let slots = create_test_slots(5)
   let table = EncounterTable::rock_smash(slots)
-  let generate = generate_slot_immut(table)
+  let generate = generate_slot(table)
   let test_cases = [
     (0x12345678U, 0),
     (0x87654321U, 0),
@@ -160,7 +155,7 @@ test "rock smash slot selection matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected_slot_index) = test_case
-    let result = generate(@lcg32.Lcg32(seed))
+    let result = generate(@lcg32.Lcg32(seed).to_ref())
     assert_eq(result, slots[expected_slot_index])
   }
 }

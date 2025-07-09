@@ -1,5 +1,5 @@
 ///|
-pub fn roll_encounter_rse_mut(
+pub fn roll_encounter_rse(
   base_encounter_rate : UInt,
   option~ : EncounterOption? = None
 ) -> @core.GeneratorMut[Bool] {
@@ -11,20 +11,7 @@ pub fn roll_encounter_rse_mut(
 }
 
 ///|
-pub fn roll_encounter_rse_immut(
-  base_encounter_rate : UInt,
-  option~ : EncounterOption? = None
-) -> @core.Generator[Bool] {
-  lcg => roll_encounter_rse_mut(base_encounter_rate, option~)(lcg.to_ref())
-}
-
-///|
-pub fn roll_encounter_force_mut(_ : @lcg32.Lcg32Ref) -> Bool {
-  true
-}
-
-///|
-pub fn roll_encounter_force_immut(_ : @lcg32.Lcg32) -> Bool {
+pub fn roll_encounter_force(_ : @lcg32.Lcg32Ref) -> Bool {
   true
 }
 
@@ -44,7 +31,7 @@ test "rse encounter drawing matches C# implementation" {
   ]
   for test_case in test_cases {
     let (seed, expected) = test_case
-    let result = roll_encounter_rse_immut(2048)(@lcg32.Lcg32(seed))
+    let result = roll_encounter_rse(2048)(@lcg32.Lcg32(seed).to_ref())
     assert_eq(result, expected)
   }
 }
@@ -52,6 +39,6 @@ test "rse encounter drawing matches C# implementation" {
 ///|
 test "always return true for force encounter" {
   let lcg = @lcg32.Lcg32(0xFFFFFFFFU)
-  let result = roll_encounter_force_immut(lcg)
+  let result = roll_encounter_force(lcg.to_ref())
   assert_eq(result, true)
 }

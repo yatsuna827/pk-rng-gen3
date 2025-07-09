@@ -1,14 +1,5 @@
-// MiddleInterruptedIVsGenerator (Method4)
-
 ///|
-pub fn generate_ivs_middle_interrupted_immut(lcg : @lcg32.Lcg32) -> @types.IVs {
-  generate_ivs_middle_interrupted_mut(lcg.to_ref())
-}
-
-///|
-pub fn generate_ivs_middle_interrupted_mut(
-  lcg_ref : @lcg32.Lcg32Ref
-) -> @types.IVs {
+pub fn generate_ivs_middle_interrupted(lcg_ref : @lcg32.Lcg32Ref) -> @types.IVs {
   let hab = lcg_ref.get_rand()
   lcg_ref.advance()
   let scd = lcg_ref.get_rand()
@@ -19,7 +10,7 @@ pub fn generate_ivs_middle_interrupted_mut(
 test "generate_ivs_middle_interrupted should advance correctly" {
   let initial_seed = 0x12345678U
   let lcg_ref = @lcg32.Lcg32(initial_seed).to_ref()
-  let _ivs = generate_ivs_middle_interrupted_mut(lcg_ref)
+  let _ivs = generate_ivs_middle_interrupted(lcg_ref)
   assert_eq(lcg_ref.get_index(from=initial_seed), 3)
 }
 
@@ -31,16 +22,7 @@ test "should match C# implementation" {
   ]
   for test_case in test_cases {
     let (lcg, expected) = test_case
-    let ivs = generate_ivs_middle_interrupted_immut(lcg)
+    let ivs = generate_ivs_middle_interrupted(lcg.to_ref())
     assert_eq(ivs.as_tuple(), expected)
   }
-}
-
-///|
-test "middle_interrupted immut and mut versions should produce same result" {
-  let lcg = @lcg32.Lcg32(0x00000001U)
-  assert_eq(
-    generate_ivs_middle_interrupted_immut(lcg),
-    generate_ivs_middle_interrupted_mut(lcg.to_ref()),
-  )
 }
