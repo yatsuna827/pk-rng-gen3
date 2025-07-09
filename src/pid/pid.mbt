@@ -42,7 +42,7 @@ pub fn generate_pid_with_conditions(
 pub fn generate_pid(lcg_ref : @lcg32.Lcg32Ref) -> @types.PID {
   let low = lcg_ref.get_rand()
   let high = lcg_ref.get_rand()
-  low | (high << 16)
+  @types.PID(low | (high << 16))
 }
 
 ///|
