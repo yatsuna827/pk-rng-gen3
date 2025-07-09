@@ -1,30 +1,30 @@
 ///|
-pub(all) type HiddenPower (PokeType, UInt)
+pub(all) type HiddenPower (PokeType, UInt) derive(Eq, Show)
 
 ///|
 pub fn IVs::hidden_power(self : IVs) -> HiddenPower {
-  HiddenPower(hidden_power_type(self), hidden_power_power(self))
+  (hidden_power_type(self), hidden_power_power(self))
 }
 
 ///|
 fn hidden_power_power(ivs : IVs) -> UInt {
-  let num = ((self.h >> 1) & 1) +
-    2 * ((self.a >> 1) & 1) +
-    4 * ((self.b >> 1) & 1) +
-    8 * ((self.s >> 1) & 1) +
-    16 * ((self.c >> 1) & 1) +
-    32 * ((self.d >> 1) & 1)
+  let num = ((ivs.h >> 1) & 1) +
+    2 * ((ivs.a >> 1) & 1) +
+    4 * ((ivs.b >> 1) & 1) +
+    8 * ((ivs.s >> 1) & 1) +
+    16 * ((ivs.c >> 1) & 1) +
+    32 * ((ivs.d >> 1) & 1)
   num * 40 / 63 + 30
 }
 
 ///|
 fn hidden_power_type(ivs : IVs) -> PokeType {
-  let num = (self.h & 1) +
-    2 * (self.a & 1) +
-    4 * (self.b & 1) +
-    8 * (self.s & 1) +
-    16 * (self.c & 1) +
-    32 * (self.d & 1)
+  let num = (ivs.h & 1) +
+    2 * (ivs.a & 1) +
+    4 * (ivs.b & 1) +
+    8 * (ivs.s & 1) +
+    16 * (ivs.c & 1) +
+    32 * (ivs.d & 1)
   let index = num * 15 / 63
   match index {
     0 => PokeType::Fighting
@@ -50,16 +50,29 @@ fn hidden_power_type(ivs : IVs) -> PokeType {
 ///|
 test "should match C# implementation" {
   let test_cases = [
-    (IVs::new(31, 31, 31, 31, 31, 31), HiddenPower(PokeType::Dark, 70U)),
-    (IVs::new(0, 0, 0, 0, 0, 0), HiddenPower(PokeType::Fighting, 30U)),
-    (IVs::new(15, 20, 25, 10, 5, 30), HiddenPower(PokeType::Fire, 45U)),
-    (IVs::new(31, 2, 31, 31, 31, 31), HiddenPower(PokeType::Ice, 70U)),
-    (IVs::new(31, 2, 31, 30, 31, 30), HiddenPower(PokeType::Fire, 70U)),
+    (IVs::new(0, 0, 0, 0, 0, 0), HiddenPower((PokeType::Fighting, 30U))),
+    (IVs::new(15, 20, 25, 10, 5, 30), HiddenPower((PokeType::Fire, 45U))),
+    //
+    (IVs::new(31, 2, 31, 30, 31, 30), HiddenPower((PokeType::Fire, 70U))),
+    (IVs::new(31, 2, 30, 30, 31, 31), HiddenPower((PokeType::Water, 70U))),
+    (IVs::new(31, 2, 31, 30, 31, 31), HiddenPower((PokeType::Grass, 70U))),
+    (IVs::new(31, 3, 31, 30, 31, 31), HiddenPower((PokeType::Electric, 70U))),
+    (IVs::new(31, 2, 30, 31, 31, 31), HiddenPower((PokeType::Ice, 70U))),
+    //
+    (IVs::new(31, 31, 30, 30, 30, 30), HiddenPower((PokeType::Fighting, 70U))),
+    (IVs::new(31, 31, 30, 30, 30, 31), HiddenPower((PokeType::Poison, 70U))),
+    (IVs::new(31, 31, 31, 30, 30, 31), HiddenPower((PokeType::Ground, 70U))),
+    (IVs::new(30, 30, 30, 30, 30, 31), HiddenPower((PokeType::Flying, 70U))),
+    (IVs::new(31, 2, 31, 31, 31, 30), HiddenPower((PokeType::Psychic, 70U))),
+    (IVs::new(31, 31, 31, 31, 30, 30), HiddenPower((PokeType::Bug, 70U))),
+    (IVs::new(31, 31, 30, 31, 30, 30), HiddenPower((PokeType::Rock, 70U))),
+    (IVs::new(31, 31, 30, 31, 30, 31), HiddenPower((PokeType::Ghost, 70U))),
+    (IVs::new(31, 2, 31, 31, 31, 31), HiddenPower((PokeType::Dragon, 70U))),
+    (IVs::new(31, 31, 31, 31, 31, 31), HiddenPower((PokeType::Dark, 70U))),
+    (IVs::new(31, 31, 31, 31, 30, 31), HiddenPower((PokeType::Steel, 70U))),
   ]
   for test_case in test_cases {
     let (ivs, expected) = test_case
-    let (expected_power, expected_type) = expected
-    assert_eq(power, expected_power)
-    assert_eq(type_, expected_type)
+    assert_eq(ivs.hidden_power(), expected)
   }
 }

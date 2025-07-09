@@ -1,4 +1,5 @@
-pub enum PokeType {
+///|
+pub(all) enum PokeType {
   Normal
   Fire
   Water
@@ -16,4 +17,4 @@ pub enum PokeType {
   Dragon
   Dark
   Steel
-} derive(Show, Eq, Compare)
+} derive(Show, Eq)
