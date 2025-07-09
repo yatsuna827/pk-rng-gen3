@@ -59,7 +59,7 @@ fn setup() -> Booster {
 ///|
 pub fn Lcg32::jump(self : Lcg32, n : UInt) -> Lcg32 {
   let mut seed = self.inner()
-  let { a_t, b_t, .. } = cache.val.or_else(setup)
+  let { a_t, b_t, .. } = cache.val.unwrap_or_else(setup)
   let mut i = 0
   let mut n = n
   while n > 0 {
@@ -75,7 +75,7 @@ pub fn Lcg32::jump(self : Lcg32, n : UInt) -> Lcg32 {
 ///|
 pub fn Lcg32::jump_back(self : Lcg32, n : UInt) -> Lcg32 {
   let mut seed = self.inner()
-  let { ar_t, br_t, .. } = cache.val.or_else(setup)
+  let { ar_t, br_t, .. } = cache.val.unwrap_or_else(setup)
   let mut i = 0
   let mut n = n
   while n > 0 {

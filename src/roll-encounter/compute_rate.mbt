@@ -21,7 +21,7 @@ fn compute_encounter_rate(
     }
     None => base_encounter_rate
   }
-  @math.minimum(2880, rate)
+  @cmp.minimum(2880, rate)
 }
 
 ///|
