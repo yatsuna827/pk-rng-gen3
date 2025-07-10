@@ -3,10 +3,10 @@ pub fn generate_wild_pokemon(
   encounter_fn~ : @core.GeneratorMut[Bool],
   slot_fn~ : @core.GeneratorMut[@encounter_slot.GBASlot],
   level_fn~ : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
-  ivs_fn~ : @core.GeneratorMut[@types.IVs],
-  nature_fn~ : @core.GeneratorMut[@types.Nature],
-  gender_fn~ : @core.GeneratorMut[@types.Gender]? = None
-) -> @core.GeneratorMut[@types.PokemonResult?] {
+  ivs_fn~ : @core.GeneratorMut[@core.IVs],
+  nature_fn~ : @core.GeneratorMut[@core.Nature],
+  gender_fn~ : @core.GeneratorMut[@core.Gender]? = None
+) -> @core.GeneratorMut[@core.PokemonResult?] {
   lcg_ref => {
     if not(encounter_fn(lcg_ref)) {
       return None
@@ -22,15 +22,15 @@ pub fn generate_wild_pokemon(
       lcg_ref,
       Some(nature),
       gender,
-      @types.GenderRatio::Male1Female1,
+      @core.GenderRatio::Male1Female1,
     )
     let ivs = ivs_fn(lcg_ref)
-    Some(@types.PokemonResult::{
+    Some(@core.PokemonResult::{
       level,
       pid: pid.inner(),
       ivs,
       nature,
-      gender: pid.to_gender(@types.GenderRatio::Male1Female1),
+      gender: pid.to_gender(@core.GenderRatio::Male1Female1),
       recalc_count,
     })
   }
@@ -68,7 +68,7 @@ test "wild pokemon generation matches C# implementation" {
   let pokemon1 = result1.unwrap()
   assert_eq(pokemon1.level, 12U)
   assert_eq(pokemon1.pid, 0xB22F82C3U)
-  assert_eq(pokemon1.nature, @types.Nature::Modest)
+  assert_eq(pokemon1.nature, @core.Nature::Modest)
   assert_eq(pokemon1.ivs.as_tuple(), (7, 25, 3, 5, 9, 26))
 
   // C#実装結果: Seed: 87654321, Pokemon: ポチエナ, Lv=12, PID=C71E3720, Nature=Lonely, IVs=[10,13,14,19,12,15]
@@ -76,6 +76,6 @@ test "wild pokemon generation matches C# implementation" {
   let pokemon2 = result2.unwrap()
   assert_eq(pokemon2.level, 12U)
   assert_eq(pokemon2.pid, 0xC71E3720U)
-  assert_eq(pokemon2.nature, @types.Nature::Lonely)
+  assert_eq(pokemon2.nature, @core.Nature::Lonely)
   assert_eq(pokemon2.ivs.as_tuple(), (10, 13, 14, 19, 12, 15))
 }

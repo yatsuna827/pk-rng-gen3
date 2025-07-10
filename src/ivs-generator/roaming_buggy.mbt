@@ -1,8 +1,8 @@
 ///|
-pub fn generate_ivs_roaming_buggy(lcg_ref : @lcg32.Lcg32Ref) -> @types.IVs {
+pub fn generate_ivs_roaming_buggy(lcg_ref : @lcg32.Lcg32Ref) -> @core.IVs {
   let hab = lcg_ref.get_rand() & 0xFF // 下位8bitのみ有効（バグ）
   let scd = lcg_ref.get_rand() & 0x0 // 常に0（バグ）
-  @types.IVs::from_code(hab, scd)
+  @core.IVs::from_code(hab, scd)
 }
 
 ///|

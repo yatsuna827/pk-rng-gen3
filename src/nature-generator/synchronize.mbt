@@ -1,7 +1,7 @@
 ///|
 pub fn generate_nature_synchronize(
-  sync_nature : @types.Nature
-) -> @core.GeneratorMut[@types.Nature] {
+  sync_nature : @core.Nature
+) -> @core.GeneratorMut[@core.Nature] {
   lcg_ref => if lcg_ref.get_rand(m=2) == 0 {
     sync_nature
   } else {
@@ -11,11 +11,11 @@ pub fn generate_nature_synchronize(
 
 ///|
 test "should match C# implementation" {
-  let generate = generate_nature_synchronize(@types.Modest)
+  let generate = generate_nature_synchronize(@core.Modest)
   let test_cases = [
-    (@lcg32.Lcg32(0x00000000U), @types.Modest),
-    (@lcg32.Lcg32(0x00000001U), @types.Modest),
-    (@lcg32.Lcg32(0x12345678U), @types.Lonely),
+    (@lcg32.Lcg32(0x00000000U), @core.Modest),
+    (@lcg32.Lcg32(0x00000001U), @core.Modest),
+    (@lcg32.Lcg32(0x12345678U), @core.Lonely),
   ]
   for test_case in test_cases {
     let (lcg, expected) = test_case

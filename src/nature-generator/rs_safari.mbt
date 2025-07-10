@@ -1,7 +1,7 @@
 ///|
 pub fn generate_nature_rs_safari(
-  pokeblock~ : @types.PokeBlock? = None
-) -> @core.GeneratorMut[@types.Nature] {
+  pokeblock~ : @core.PokeBlock? = None
+) -> @core.GeneratorMut[@core.Nature] {
   lcg_ref => {
     let rand = lcg_ref.get_rand(m=100)
     match pokeblock {
@@ -25,23 +25,23 @@ pub fn generate_nature_rs_safari(
 ///|
 test "C# compatibility" {
   let test_cases = [
-    (@lcg32.Lcg32(0x12345678U), None, @types.Lonely, 0x84EA22A2U),
+    (@lcg32.Lcg32(0x12345678U), None, @core.Lonely, 0x84EA22A2U),
     (
       @lcg32.Lcg32(0x00000000),
-      Some(@types.PokeBlock::new(@types.Spicy)),
-      @types.Brave,
+      Some(@core.PokeBlock::new(@core.Spicy)),
+      @core.Brave,
       0x2578510FU,
     ),
     (
       @lcg32.Lcg32(0x12345678U),
-      Some(@types.PokeBlock::new(@types.Spicy)),
-      @types.Adamant,
+      Some(@core.PokeBlock::new(@core.Spicy)),
+      @core.Adamant,
       0x8B6072A7U,
     ),
     (
       @lcg32.Lcg32(0x00000001),
-      Some(@types.PokeBlock::new(@types.Sweet)),
-      @types.Jolly,
+      Some(@core.PokeBlock::new(@core.Sweet)),
+      @core.Jolly,
       0x791C0A6CU,
     ),
   ]

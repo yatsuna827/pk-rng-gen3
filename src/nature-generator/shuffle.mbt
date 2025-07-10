@@ -1,6 +1,6 @@
 ///|
-fn shuffle(lcg_ref : @lcg32.Lcg32Ref) -> Array[@types.Nature] {
-  let list = Array::makei(25, i => @types.Nature::from_value(
+fn shuffle(lcg_ref : @lcg32.Lcg32Ref) -> Array[@core.Nature] {
+  let list = Array::makei(25, i => @core.Nature::from_value(
     i.reinterpret_as_uint(),
   ))
   for i = 0; i < 25; i = i + 1 {
@@ -27,6 +27,6 @@ test "preserves all 25 nature values during shuffling process" {
   let lcg_ref = @lcg32.Lcg32(0x00000000U).to_ref()
   let list = shuffle(lcg_ref)
   for i = 0U; i < 25; i = i + 1 {
-    assert_eq(list.contains(@types.Nature::from_value(i)), true)
+    assert_eq(list.contains(@core.Nature::from_value(i)), true)
   }
 }

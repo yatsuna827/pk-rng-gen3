@@ -1,11 +1,11 @@
 ///|
 pub fn generate_ivs_posterior_interrupted(
   lcg_ref : @lcg32.Lcg32Ref
-) -> @types.IVs {
+) -> @core.IVs {
   let hab = lcg_ref.get_rand()
   let scd = lcg_ref.get_rand()
   lcg_ref.advance()
-  @types.IVs::from_code(hab, scd)
+  @core.IVs::from_code(hab, scd)
 }
 
 ///|

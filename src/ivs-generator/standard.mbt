@@ -1,8 +1,8 @@
 ///|
-pub fn generate_ivs_standard(lcg_ref : @lcg32.Lcg32Ref) -> @types.IVs {
+pub fn generate_ivs_standard(lcg_ref : @lcg32.Lcg32Ref) -> @core.IVs {
   let hab = lcg_ref.get_rand()
   let scd = lcg_ref.get_rand()
-  @types.IVs::from_code(hab, scd)
+  @core.IVs::from_code(hab, scd)
 }
 
 ///|

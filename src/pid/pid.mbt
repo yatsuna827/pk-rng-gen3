@@ -1,14 +1,14 @@
 ///| 
 fn generate_pid_with_conditions_helper(
   lcg_ref : @lcg32.Lcg32Ref,
-  required_nature : @types.Nature?,
-  required_gender : @types.Gender?,
-  gender_ratio : @types.GenderRatio,
+  required_nature : @core.Nature?,
+  required_gender : @core.Gender?,
+  gender_ratio : @core.GenderRatio,
   recalc~ : UInt = 0
-) -> (@types.PID, UInt) {
+) -> (@core.PID, UInt) {
   let pid = generate_pid(lcg_ref)
   let nature_match = required_nature.map_or(true, fn(n) { pid.to_nature() == n })
-  let gender_match = if gender_ratio == @types.GenderRatio::Genderless {
+  let gender_match = if gender_ratio == @core.GenderRatio::Genderless {
     true // 性別なしポケモンは性別制約を無視
   } else {
     required_gender.map_or(true, fn(g) { pid.to_gender(gender_ratio) == g })
@@ -29,17 +29,17 @@ fn generate_pid_with_conditions_helper(
 ///|
 pub fn generate_pid_with_conditions(
   lcg_ref : @lcg32.Lcg32Ref,
-  required_nature : @types.Nature?,
-  required_gender : @types.Gender?,
-  gender_ratio : @types.GenderRatio
-) -> (@types.PID, UInt) {
+  required_nature : @core.Nature?,
+  required_gender : @core.Gender?,
+  gender_ratio : @core.GenderRatio
+) -> (@core.PID, UInt) {
   generate_pid_with_conditions_helper(
     lcg_ref, required_nature, required_gender, gender_ratio,
   )
 }
 
 ///| 
-pub fn generate_pid(lcg_ref : @lcg32.Lcg32Ref) -> @types.PID {
+pub fn generate_pid(lcg_ref : @lcg32.Lcg32Ref) -> @core.PID {
   let low = lcg_ref.get_rand()
   let high = lcg_ref.get_rand()
   low | (high << 16)
@@ -67,12 +67,12 @@ test "generate_basic_pid should use two RNG calls" {
 ///|
 test "generate_pid_with_conditions should generate PID matching required nature" {
   let lcg_ref = @lcg32.Lcg32(0x12345678U).to_ref()
-  let required_nature = @types.Nature::Hardy
+  let required_nature = @core.Nature::Hardy
   let (pid, _) = generate_pid_with_conditions(
     lcg_ref,
     Some(required_nature),
     None,
-    @types.GenderRatio::Genderless,
+    @core.GenderRatio::Genderless,
   )
   assert_eq(pid.to_nature(), required_nature)
 }
@@ -80,8 +80,8 @@ test "generate_pid_with_conditions should generate PID matching required nature"
 ///|
 test "generate_pid_with_conditions should generate PID matching required gender" {
   let lcg_ref = @lcg32.Lcg32(0x87654321U).to_ref()
-  let required_gender = @types.Gender::Female
-  let gender_ratio = @types.GenderRatio::Male1Female1
+  let required_gender = @core.Gender::Female
+  let gender_ratio = @core.GenderRatio::Male1Female1
   let (pid, _) = generate_pid_with_conditions(
     lcg_ref,
     None,
@@ -94,9 +94,9 @@ test "generate_pid_with_conditions should generate PID matching required gender"
 ///|
 test "generate_pid_with_conditions should generate PID matching both nature and gender" {
   let lcg_ref = @lcg32.Lcg32(0xABCDEF01U).to_ref()
-  let required_nature = @types.Nature::Modest
-  let required_gender = @types.Gender::Male
-  let gender_ratio = @types.GenderRatio::Male1Female1
+  let required_nature = @core.Nature::Modest
+  let required_gender = @core.Gender::Male
+  let gender_ratio = @core.GenderRatio::Male1Female1
   let (pid, _) = generate_pid_with_conditions(
     lcg_ref,
     Some(required_nature),
@@ -116,7 +116,7 @@ test "generate_pid_with_conditions should work with no constraints" {
     lcg.to_ref(),
     None,
     None,
-    @types.GenderRatio::Genderless,
+    @core.GenderRatio::Genderless,
   )
   assert_eq(pid.inner(), generate_pid(lcg.to_ref()).inner())
 }
@@ -124,18 +124,18 @@ test "generate_pid_with_conditions should work with no constraints" {
 ///|
 test "generate_pid_with_conditions should handle genderless pokemon" {
   let lcg_ref = @lcg32.Lcg32(0x55555555U).to_ref()
-  let required_nature = @types.Nature::Timid
+  let required_nature = @core.Nature::Timid
   let (pid, _) = generate_pid_with_conditions(
     lcg_ref,
     Some(required_nature),
     None,
-    @types.GenderRatio::Genderless,
+    @core.GenderRatio::Genderless,
   )
   assert_eq(pid.to_nature(), required_nature)
 
   // Gender should always be genderless for genderless species
   assert_eq(
-    pid.to_gender(@types.GenderRatio::Genderless),
-    @types.Gender::Genderless,
+    pid.to_gender(@core.GenderRatio::Genderless),
+    @core.Gender::Genderless,
   )
 }
