@@ -1,0 +1,17 @@
+{
+  "import": [
+    "yatsuna_827/pk-rng-gen3/core"
+  ],
+  "link": {
+    "wasm": {
+      "exports": [
+        "Pokedex::new",
+        "Pokedex::find_pokemon",
+        "Pokedex::find_pokemon_with_forme",
+        "Pokedex::get_all_forms",
+        "Pokedex::get_unique_pokemon_list",
+        "Pokedex::get_all_pokemon_list"
+      ]
+    }
+  }
+}
