@@ -1,28 +1,32 @@
 ///|
 pub struct Pokedex {
-  priv name_index : Map[String, @core.Species]
-  priv unique_name_index : Map[String, @core.Species]
-  priv all_data : Array[@core.Species]
+  priv name_map : Map[String, @core.Species]
+  priv unique_map : Map[String, @core.Species]
+  priv forme_map : Map[String, Array[String]]
 }
 
 ///|
 pub fn Pokedex::new() -> Pokedex {
   let name_map = Map::new()
   let unique_map = Map::new()
+  let forme_map = Map::new()
   let data = get_pokemon_data()
   for pokemon in data {
     if !name_map.contains(pokemon.name) {
       name_map.set(pokemon.name, pokemon)
     }
-    unique_map.set(
-      match pokemon.forme {
-        Some(forme) => "\{pokemon.name}#\{forme}"
-        None => pokemon.name
-      },
-      pokemon,
-    )
+    match pokemon.forme {
+      Some(forme) => {
+        unique_map.set("\{pokemon.name}#\{forme}", pokemon)
+        if !forme_map.contains(pokemon.name) {
+          forme_map[pokemon.name] = []
+        }
+        forme_map.get(pokemon.name).unwrap().push(forme)
+      }
+      None => unique_map.set(pokemon.name, pokemon)
+    }
   }
-  { name_index: name_map, unique_name_index: unique_map, all_data: data }
+  { name_map, unique_map, forme_map }
 }
 
 ///|
@@ -34,24 +38,26 @@ pub fn Pokedex::find_pokemon(
   match forme {
     Some(forme) =>
       if forme == "" {
-        self.name_index.get(name)
+        self.name_map.get(name)
       } else {
-        self.unique_name_index.get("\{name}#\{forme}")
+        self.unique_map.get("\{name}#\{forme}")
       }
-    None => self.name_index.get(name)
+    None => self.name_map.get(name)
   }
 }
 
 ///|
-pub fn Pokedex::get_unique_pokemon_list(self : Pokedex) -> Array[@core.Species] {
-  let arr = self.name_index.values().to_array()
+pub fn Pokedex::get_unique_pokemon_list(
+  self : Pokedex
+) -> ArrayView[@core.Species] {
+  let arr = self.name_map.values().to_array()
   arr.sort_by_key(p => p.dexNo)
   arr
 }
 
 ///|
-pub fn Pokedex::get_all_pokemon_list(self : Pokedex) -> Array[@core.Species] {
-  self.all_data.copy()
+pub fn Pokedex::get_formes(self : Pokedex, name : String) -> Array[String] {
+  self.forme_map.get(name).unwrap_or_default()
 }
 
 ///|
@@ -3829,4 +3835,14 @@ fn get_pokemon_data() -> Array[@core.Species] {
       gender_ratio: Genderless,
     },
   ]
+}
+
+///|
+test "pokedex" {
+  let dex = Pokedex::new()
+  assert_eq(dex.find_pokemon("ヌオー").unwrap().name, "ヌオー")
+  let unown_z = dex.find_pokemon("アンノーン", forme=Some("Z")).unwrap()
+  assert_eq(unown_z.name, "アンノーン")
+  assert_eq(unown_z.forme.unwrap(), "Z")
+  assert_eq(dex.get_formes("デオキシス").length(), 4)
 }
