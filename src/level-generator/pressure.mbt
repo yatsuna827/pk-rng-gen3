@@ -1,5 +1,5 @@
 ///|
-pub fn generate_level_pressure(
+pub fn pressure(
   lcg_ref : @lcg32.Lcg32Ref,
   basic_lv : UInt,
   variable_lv : UInt
@@ -21,7 +21,7 @@ pub fn generate_level_pressure(
 test "should advance RNG state by two steps" {
   let initial_seed = 0x12345678U
   let lcg_ref = @lcg32.Lcg32(initial_seed).to_ref()
-  let level = generate_level_pressure(lcg_ref, 20U, 5U)
+  let level = pressure(lcg_ref, 20U, 5U)
   assert_eq(level, 24U)
   assert_eq(lcg_ref.get_index(from=initial_seed), 2)
 }
@@ -29,7 +29,7 @@ test "should advance RNG state by two steps" {
 ///|
 test "panic variable_lv is 0" {
   let lcg = @lcg32.Lcg32(0x12345678U)
-  let _ = generate_level_pressure(lcg.to_ref(), 50U, 0U)
+  let _ = pressure(lcg.to_ref(), 50U, 0U)
 
 }
 
@@ -45,7 +45,7 @@ test "should match C# implementation" {
   for test_case in test_cases {
     let (seed, basic, variable, expected) = test_case
     let lcg = @lcg32.Lcg32(seed)
-    let level = generate_level_pressure(lcg.to_ref(), basic, variable)
+    let level = pressure(lcg.to_ref(), basic, variable)
     assert_eq(level, expected)
   }
 }

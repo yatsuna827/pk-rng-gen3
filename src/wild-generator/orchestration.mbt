@@ -55,9 +55,9 @@ test "wild pokemon generation matches C# implementation" {
     slot_fn=@encounter_slot.generate_slot(
       @encounter_slot.EncounterTable::grass(slots),
     ),
-    level_fn=@level_generator.generate_level_standard,
-    ivs_fn=@ivs_generator.generate_ivs_prior_interrupt,
-    nature_fn=@nature_generator.generate_nature_standard,
+    level_fn=@level_generator.standard,
+    ivs_fn=@ivs_generator.prior_interrupt,
+    nature_fn=@nature_generator.standard,
   )
 
   // C#実装結果: Seed: 12345678, Pokemon: ラクライ, Lv=12, PID=B22F82C3, Nature=Modest, IVs=[7,25,3,5,9,26]

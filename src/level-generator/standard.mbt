@@ -1,5 +1,5 @@
 ///|
-pub fn generate_level_standard(
+pub fn standard(
   lcg_ref : @lcg32.Lcg32Ref,
   basic_lv : UInt,
   variable_lv : UInt
@@ -14,7 +14,7 @@ pub fn generate_level_standard(
 test "should advance RNG state by one step" {
   let initial_seed = 0x12345678U
   let lcg_ref = @lcg32.Lcg32(initial_seed).to_ref()
-  let level = generate_level_standard(lcg_ref, 20U, 5U)
+  let level = standard(lcg_ref, 20U, 5U)
   assert_eq(level, 24U)
   assert_eq(lcg_ref.get_index(from=initial_seed), 1)
 }
@@ -28,7 +28,7 @@ test "should match C# implementation" {
   ]
   for test_case in test_cases {
     let (lcg, basic, variable, expected) = test_case
-    let level = generate_level_standard(lcg.to_ref(), basic, variable)
+    let level = standard(lcg.to_ref(), basic, variable)
     assert_eq(level, expected)
   }
 }
@@ -36,6 +36,6 @@ test "should match C# implementation" {
 ///|
 test "panic variable_lv is 0" {
   let lcg_ref = @lcg32.Lcg32(0x12345678U).to_ref()
-  let _ = generate_level_standard(lcg_ref, 50U, 0U)
+  let _ = standard(lcg_ref, 50U, 0U)
 
 }

@@ -1,5 +1,5 @@
 ///|
-pub fn generate_gender_cute_charm(
+pub fn cute_charm(
   cute_charm_gender : @core.Gender
 ) -> @core.GeneratorMut[@core.Gender] {
   lcg_ref => {
@@ -18,7 +18,7 @@ pub fn generate_gender_cute_charm(
 test "cute charm does not consume RNG for Genderless charm" {
   let lcg_ref = @lcg32.Lcg32(0x12345678U).to_ref()
   let initial_seed = lcg_ref.seed()
-  let _ = generate_gender_cute_charm(@core.Genderless)(lcg_ref)
+  let _ = cute_charm(@core.Genderless)(lcg_ref)
   assert_eq(lcg_ref.seed(), initial_seed)
 }
 
@@ -39,7 +39,7 @@ test "should match C# implementation" {
   for test_case in male_test_cases {
     let (seed, expected) = test_case
     let lcg = @lcg32.Lcg32(seed)
-    let result = generate_gender_cute_charm(@core.Male)(lcg.to_ref())
+    let result = cute_charm(@core.Male)(lcg.to_ref())
     assert_eq(result, expected)
   }
   let female_test_cases = [
@@ -57,7 +57,7 @@ test "should match C# implementation" {
   for test_case in female_test_cases {
     let (seed, expected) = test_case
     let lcg = @lcg32.Lcg32(seed)
-    let result = generate_gender_cute_charm(@core.Female)(lcg.to_ref())
+    let result = cute_charm(@core.Female)(lcg.to_ref())
     assert_eq(result, expected)
   }
 }

@@ -1,14 +1,14 @@
 ///|
-pub fn generate_nature_rs_safari(
+pub fn safari_rs(
   pokeblock~ : @core.PokeBlock? = None
 ) -> @core.GeneratorMut[@core.Nature] {
   lcg_ref => {
     let rand = lcg_ref.get_rand(m=100)
     match pokeblock {
-      None => generate_nature_standard(lcg_ref)
+      None => standard(lcg_ref)
       Some(block) =>
         if rand >= 80 {
-          generate_nature_standard(lcg_ref)
+          standard(lcg_ref)
         } else {
           for n in shuffle(lcg_ref) {
             if block.is_liked_by(n) {
@@ -48,7 +48,7 @@ test "C# compatibility" {
   for test_case in test_cases {
     let (lcg, pokeblock, expected_nature, expected_seed) = test_case
     let lcg_ref = lcg.to_ref()
-    let result = generate_nature_rs_safari(pokeblock~)(lcg_ref)
+    let result = safari_rs(pokeblock~)(lcg_ref)
     assert_eq(result, expected_nature)
     assert_eq(lcg_ref.seed(), expected_seed)
   }

@@ -1,5 +1,5 @@
 ///|
-pub fn generate_ivs_middle_interrupted(lcg_ref : @lcg32.Lcg32Ref) -> @core.IVs {
+pub fn middle_interrupted(lcg_ref : @lcg32.Lcg32Ref) -> @core.IVs {
   let hab = lcg_ref.get_rand()
   lcg_ref.advance()
   let scd = lcg_ref.get_rand()
@@ -7,10 +7,10 @@ pub fn generate_ivs_middle_interrupted(lcg_ref : @lcg32.Lcg32Ref) -> @core.IVs {
 }
 
 ///|
-test "generate_ivs_middle_interrupted should advance correctly" {
+test "middle_interrupted should advance correctly" {
   let initial_seed = 0x12345678U
   let lcg_ref = @lcg32.Lcg32(initial_seed).to_ref()
-  let _ivs = generate_ivs_middle_interrupted(lcg_ref)
+  let _ivs = middle_interrupted(lcg_ref)
   assert_eq(lcg_ref.get_index(from=initial_seed), 3)
 }
 
@@ -22,7 +22,7 @@ test "should match C# implementation" {
   ]
   for test_case in test_cases {
     let (lcg, expected) = test_case
-    let ivs = generate_ivs_middle_interrupted(lcg.to_ref())
+    let ivs = middle_interrupted(lcg.to_ref())
     assert_eq(ivs.as_tuple(), expected)
   }
 }

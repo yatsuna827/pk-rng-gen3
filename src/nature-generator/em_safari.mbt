@@ -1,11 +1,11 @@
 ///|
-pub fn generate_nature_em_safari(
+pub fn safari_em(
   sync_nature~ : @core.Nature? = None,
   pokeblock~ : @core.PokeBlock? = None
 ) -> @core.GeneratorMut[@core.Nature] {
   let fallback = match sync_nature {
-    Some(sync_nature) => generate_nature_synchronize(sync_nature)
-    None => generate_nature_standard
+    Some(sync_nature) => synchronize(sync_nature)
+    None => standard
   }
   lcg_ref => {
     let rand = lcg_ref.get_rand(m=100)
@@ -31,7 +31,7 @@ pub fn generate_nature_em_safari(
 test "EmSafari: C# compatibility - Test 1: Sync=Brave, Block=Spicy" {
   let pokeblock = Some(@core.PokeBlock::new(@core.Spicy))
   let sync_nature = Some(@core.Brave)
-  let generate = generate_nature_em_safari(pokeblock~, sync_nature~)
+  let generate = safari_em(pokeblock~, sync_nature~)
   let test_cases = [
     (@lcg32.Lcg32(0x00000000), @core.Brave),
     (@lcg32.Lcg32(0x00000001), @core.Lonely),
@@ -53,7 +53,7 @@ test "EmSafari: C# compatibility - Test 1: Sync=Brave, Block=Spicy" {
 ///|
 test "EmSafari: C# compatibility - Test 2: Sync=Timid, Block=Tasteless" {
   let sync_nature = Some(@core.Timid)
-  let generate = generate_nature_em_safari(sync_nature~)
+  let generate = safari_em(sync_nature~)
   //
 
   let test_cases = [
@@ -74,7 +74,7 @@ test "EmSafari: C# compatibility - Test 2: Sync=Timid, Block=Tasteless" {
 test "EmSafari: C# compatibility - Test 3: Sync=Modest, Block=Sweet" {
   let pokeblock = Some(@core.PokeBlock::new(@core.Sweet))
   let sync_nature = Some(@core.Modest)
-  let generate = generate_nature_em_safari(pokeblock~, sync_nature~)
+  let generate = safari_em(pokeblock~, sync_nature~)
   let test_cases = [
     (@lcg32.Lcg32(0x00000000), @core.Hasty),
     (@lcg32.Lcg32(0x00000001), @core.Jolly),
