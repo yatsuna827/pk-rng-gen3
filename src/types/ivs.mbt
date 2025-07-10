@@ -1,3 +1,4 @@
+///|
 pub(all) struct IVs {
   h : UInt
   a : UInt
@@ -7,6 +8,7 @@ pub(all) struct IVs {
   s : UInt
 } derive(Eq, Show)
 
+///|
 pub fn IVs::new(
   h : UInt,
   a : UInt,
@@ -18,6 +20,7 @@ pub fn IVs::new(
   { h, a, b, c, d, s }
 }
 
+///|
 pub fn IVs::from_code(hab : UInt, scd : UInt) -> IVs {
   {
     h: hab & 0x1f,
@@ -29,6 +32,7 @@ pub fn IVs::from_code(hab : UInt, scd : UInt) -> IVs {
   }
 }
 
+///|
 pub fn IVs::as_tuple(self : IVs) -> (UInt, UInt, UInt, UInt, UInt, UInt) {
   (self.h, self.a, self.b, self.c, self.d, self.s)
 }
