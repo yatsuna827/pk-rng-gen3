@@ -38,20 +38,24 @@ pub fn generate_wild_pokemon(
 
 ///|
 test "wild pokemon generation matches C# implementation" {
-  // C#実装と同じスロット構成（110番道路）
+  // claude codeくんが110番道路って言って書いてきたけど普通に嘘
+  let poochyena = @core.Species::dummy(261, (@core.Dark, None))
+  let electrike = @core.Species::dummy(309, (@core.Electric, None))
+  let plusle = @core.Species::dummy(311, (@core.Electric, None))
+  let minun = @core.Species::dummy(312, (@core.Electric, None))
   let slots = [
-    @encounter_slot.GBASlot::{ pokemon_id: 261, min_level: 12, max_level: 12 }, // ポチエナ 20%
-    @encounter_slot.GBASlot::{ pokemon_id: 309, min_level: 12, max_level: 12 }, // ラクライ 20%  
-    @encounter_slot.GBASlot::{ pokemon_id: 311, min_level: 13, max_level: 13 }, // プラスル 10%
-    @encounter_slot.GBASlot::{ pokemon_id: 312, min_level: 13, max_level: 13 }, // マイナン 10%
-    @encounter_slot.GBASlot::{ pokemon_id: 309, min_level: 12, max_level: 12 }, // ラクライ 10%
-    @encounter_slot.GBASlot::{ pokemon_id: 261, min_level: 12, max_level: 12 }, // ポチエナ 10%
-    @encounter_slot.GBASlot::{ pokemon_id: 311, min_level: 13, max_level: 13 }, // プラスル 5%
-    @encounter_slot.GBASlot::{ pokemon_id: 312, min_level: 13, max_level: 13 }, // マイナン 5%
-    @encounter_slot.GBASlot::{ pokemon_id: 309, min_level: 12, max_level: 12 }, // ラクライ 4%
-    @encounter_slot.GBASlot::{ pokemon_id: 261, min_level: 12, max_level: 12 }, // ポチエナ 4%
-    @encounter_slot.GBASlot::{ pokemon_id: 311, min_level: 13, max_level: 13 }, // プラスル 1%
-    @encounter_slot.GBASlot::{ pokemon_id: 312, min_level: 13, max_level: 13 }, // マイナン 1%
+    @encounter_slot.GBASlot::new(poochyena, 12, 12),
+    @encounter_slot.GBASlot::new(electrike, 12, 12),
+    @encounter_slot.GBASlot::new(plusle, 13, 13),
+    @encounter_slot.GBASlot::new(minun, 13, 13),
+    @encounter_slot.GBASlot::new(electrike, 12, 12),
+    @encounter_slot.GBASlot::new(poochyena, 12, 12),
+    @encounter_slot.GBASlot::new(plusle, 13, 13),
+    @encounter_slot.GBASlot::new(minun, 13, 13),
+    @encounter_slot.GBASlot::new(electrike, 12, 12),
+    @encounter_slot.GBASlot::new(poochyena, 12, 12),
+    @encounter_slot.GBASlot::new(plusle, 13, 13),
+    @encounter_slot.GBASlot::new(minun, 13, 13),
   ]
   let generate = generate_wild_pokemon(
     encounter_fn=@roll_encounter.roll_encounter_force,

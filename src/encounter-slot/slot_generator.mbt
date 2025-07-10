@@ -5,15 +5,11 @@ pub fn generate_slot(table : EncounterTable) -> @core.GeneratorMut[GBASlot] {
 
 ///|
 fn create_test_slots(count : Int) -> Array[GBASlot] {
-  let slots = Array::make(count, GBASlot::{
-    pokemon_id: 1,
+  Array::makei(count, i => GBASlot::{
+    pokemon: @core.Species::dummy(i),
     min_level: 5,
     max_level: 10,
   })
-  for i = 0; i < count; i = i + 1 {
-    slots[i] = GBASlot::{ pokemon_id: i, min_level: 5, max_level: 10 }
-  }
-  slots
 }
 
 ///|

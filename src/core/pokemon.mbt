@@ -7,7 +7,7 @@ pub(all) struct Species {
   types : (PokeType, PokeType?)
   abilities : (String, String)
   gender_ratio : GenderRatio
-}
+} derive(Show)
 
 ///|
 pub impl Eq for Species with op_equal(self, other) {

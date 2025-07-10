@@ -1,6 +1,15 @@
 ///|
 pub(all) struct GBASlot {
-  pokemon_id : Int
+  pokemon : @core.Species
   min_level : Int
   max_level : Int
 } derive(Eq, Show)
+
+///|
+pub fn GBASlot::new(
+  pokemon : @core.Species,
+  min_level : Int,
+  max_level : Int
+) -> GBASlot {
+  { pokemon, min_level, max_level }
+}

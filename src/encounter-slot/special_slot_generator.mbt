@@ -41,40 +41,20 @@ pub fn try_generate_null(_ : @lcg32.Lcg32Ref) -> GBASlot? {
 ///|
 test "attract generator matches C# implementation" {
   let attractable_slots = [
-    GBASlot::{ pokemon_id: 25, min_level: 5, max_level: 10 },
-    GBASlot::{ pokemon_id: 81, min_level: 5, max_level: 10 },
+    GBASlot::{ pokemon: @core.Species::dummy(25), min_level: 5, max_level: 10 },
+    GBASlot::{ pokemon: @core.Species::dummy(81), min_level: 5, max_level: 10 },
   ]
   let test_cases = [
-    (
-      0x00000000U,
-      Some(GBASlot::{ pokemon_id: 25, min_level: 5, max_level: 10 }),
-      0xE97E7B6AU,
-    ),
-    (
-      0x00000001U,
-      Some(GBASlot::{ pokemon_id: 81, min_level: 5, max_level: 10 }),
-      0xAC2115D3U,
-    ),
-    (
-      0x00000002U,
-      Some(GBASlot::{ pokemon_id: 81, min_level: 5, max_level: 10 }),
-      0x6EC3B03CU,
-    ),
+    (0x00000000U, Some(attractable_slots[0]), 0xE97E7B6AU),
+    (0x00000001U, Some(attractable_slots[1]), 0xAC2115D3U),
+    (0x00000002U, Some(attractable_slots[1]), 0x6EC3B03CU),
     (0x00000003U, None, 0xC5534BBAU),
     (0x00000004U, None, 0x07199A27U),
     (0x00000005U, None, 0x48DFE894U),
     (0x00000064U, None, 0xB1770307U),
-    (
-      0x000003E8U,
-      Some(GBASlot::{ pokemon_id: 81, min_level: 5, max_level: 10 }),
-      0x34A9A592U,
-    ),
+    (0x000003E8U, Some(attractable_slots[1]), 0x34A9A592U),
     (0x12345678U, None, 0x0B71C18BU),
-    (
-      0x87654321U,
-      Some(GBASlot::{ pokemon_id: 25, min_level: 5, max_level: 10 }),
-      0xD94ADDF3U,
-    ),
+    (0x87654321U, Some(attractable_slots[0]), 0xD94ADDF3U),
   ]
   for test_case in test_cases {
     let (seed, expected_result, expected_final_seed) = test_case
@@ -88,7 +68,11 @@ test "attract generator matches C# implementation" {
 
 ///|
 test "mass outbreak generator matches C# implementation" {
-  let outbreak_slot = GBASlot::{ pokemon_id: 129, min_level: 5, max_level: 36 }
+  let outbreak_slot = GBASlot::{
+    pokemon: @core.Species::dummy(129),
+    min_level: 5,
+    max_level: 36,
+  }
   let test_cases = [
     (0x00000000U, Some(outbreak_slot), 0x00006073U),
     (0x00000001U, Some(outbreak_slot), 0x41C6AEE0U),
