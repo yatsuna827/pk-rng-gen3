@@ -17,6 +17,18 @@ pub fn try_generate_attract(
 }
 
 ///|
+pub fn attract_magnet_pull(table : Array[GBASlot]) -> Array[GBASlot] {
+  table.filter(slot => slot.pokemon.types.0 == @core.Steel ||
+    slot.pokemon.types.1 == Some(@core.Steel))
+}
+
+///|
+pub fn attract_static(table : Array[GBASlot]) -> Array[GBASlot] {
+  table.filter(slot => slot.pokemon.types.0 == @core.Electric ||
+    slot.pokemon.types.1 == Some(@core.Electric))
+}
+
+///|
 pub fn try_generate_mass_outbreak(
   mass_outbreak_slot : GBASlot
 ) -> @core.GeneratorMut[GBASlot?] {
@@ -30,11 +42,6 @@ pub fn try_generate_mass_outbreak(
 ///|
 pub fn try_generate_dummy(lcg_ref : @lcg32.Lcg32Ref) -> GBASlot? {
   lcg_ref.advance()
-  None
-}
-
-///|
-pub fn try_generate_null(_ : @lcg32.Lcg32Ref) -> GBASlot? {
   None
 }
 
@@ -116,21 +123,5 @@ test "dummy generator matches C# implementation" {
     let final_seed = lcg_ref.seed()
     assert_eq(result, None)
     assert_eq(final_seed, expected_final_seed)
-  }
-}
-
-///|
-test "null generator matches C# implementation" {
-  let test_cases = [
-    0x00000000U, 0x00000001U, 0x00000002U, 0x00000003U, 0x00000004U, 0x00000005U,
-    0x00000064U, 0x000003E8U, 0x12345678U, 0x87654321U,
-  ]
-  for test_case in test_cases {
-    let seed = test_case
-    let lcg_ref = @lcg32.Lcg32(seed).to_ref()
-    let result = try_generate_null(lcg_ref)
-    let final_seed = lcg_ref.seed()
-    assert_eq(result, None)
-    assert_eq(final_seed, seed)
   }
 }

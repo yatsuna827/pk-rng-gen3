@@ -1,5 +1,5 @@
 ///|
-pub(all) type PID UInt
+pub(all) type PID UInt derive(Eq, Show)
 
 ///|
 pub fn PID::to_nature(self : PID) -> Nature {
