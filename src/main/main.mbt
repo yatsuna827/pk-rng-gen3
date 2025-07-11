@@ -10,6 +10,7 @@ fn main {
     ),
     ivs_fn=@ivs.standard,
   )
-  let result = g(lcg.to_ref())
-  println(result)
+  for s in lcg.iter().take(10) {
+    println(g(s.to_ref()).ivs)
+  }
 }

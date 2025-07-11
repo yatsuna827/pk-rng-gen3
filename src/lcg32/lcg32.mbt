@@ -89,6 +89,17 @@ pub fn Lcg32::jump_back(self : Lcg32, n : UInt) -> Lcg32 {
 }
 
 ///|
+pub fn Lcg32::iter(self : Lcg32) -> Iter[Lcg32] {
+  let lcg = self.to_ref()
+  Iter::new(visit => while true {
+    guard visit(lcg.val) is IterContinue else { break IterEnd }
+    lcg.advance()
+  } else {
+    IterEnd
+  })
+}
+
+///|
 pub fn Lcg32::to_string(self : Lcg32) -> String {
   @fmt.to_hex(self.inner()).pad_start(8, '0')
 }
