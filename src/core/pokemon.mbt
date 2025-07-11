@@ -30,7 +30,7 @@ pub(all) struct Individual {
   lv : UInt
   pid : PID
   ivs : IVs
-}
+} derive(Show)
 
 ///|
 pub fn Individual::nature(self : Individual) -> Nature {

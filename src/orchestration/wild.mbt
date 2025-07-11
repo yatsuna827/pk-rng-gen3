@@ -1,5 +1,5 @@
 ///| 
-pub fn generate_wild_pokemon(
+pub fn wild_pokemon(
   encounter_fn~ : @core.GeneratorMut[Bool],
   slot_fn~ : @core.GeneratorMut[@encounter_slot.GBASlot],
   level_fn~ : (@lcg32.Lcg32Ref, UInt, UInt) -> UInt,
@@ -50,7 +50,7 @@ test "wild pokemon generation matches C# implementation" {
     @encounter_slot.GBASlot::new(plusle, 12, 12),
     @encounter_slot.GBASlot::new(plusle, 13, 13),
   ]
-  let generate = generate_wild_pokemon(
+  let generate = wild_pokemon(
     encounter_fn=@roll_encounter.roll_encounter_force,
     slot_fn=@encounter_slot.generate_slot(
       @encounter_slot.EncounterTable::grass(slots),

@@ -1,0 +1,17 @@
+{
+  "is-main": true,
+  "import": [
+    "yatsuna_827/pk-rng-gen3/core",
+    "yatsuna_827/pk-rng-gen3/lcg32",
+    "yatsuna_827/pk-rng-gen3/orchestration",
+    "yatsuna_827/pk-rng-gen3/pokedex",
+    {
+      "path": "yatsuna_827/pk-rng-gen3/encounter_slot",
+      "alias": "slot"
+    },
+    {
+      "path": "yatsuna_827/pk-rng-gen3/ivs_generator",
+      "alias": "ivs"
+    }
+  ]
+}

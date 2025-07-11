@@ -1,0 +1,12 @@
+{
+  "import": [
+    "yatsuna_827/pk-rng-gen3/core",
+    "yatsuna_827/pk-rng-gen3/lcg32",
+    "yatsuna_827/pk-rng-gen3/encounter_slot",
+    "yatsuna_827/pk-rng-gen3/roll_encounter",
+    "yatsuna_827/pk-rng-gen3/level_generator",
+    "yatsuna_827/pk-rng-gen3/pid",
+    "yatsuna_827/pk-rng-gen3/ivs_generator",
+    "yatsuna_827/pk-rng-gen3/nature_generator"
+  ]
+}
