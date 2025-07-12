@@ -101,7 +101,14 @@ pub fn Lcg32::iter(self : Lcg32) -> Iter[Lcg32] {
 
 ///|
 pub fn Lcg32::to_string(self : Lcg32) -> String {
-  @fmt.to_hex(self.inner()).pad_start(8, '0')
+  self.inner().to_string(radix=16).to_upper().pad_start(8, '0')
+}
+
+///|
+test "lcg32 string" {
+  inspect(Lcg32(0).to_string(), content="00000000")
+  inspect(Lcg32(0xFFFFFFFF).to_string(), content="FFFFFFFF")
+  inspect(Lcg32(0xCAFFEE).to_string(), content="00CAFFEE")
 }
 
 ///|

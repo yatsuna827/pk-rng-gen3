@@ -2,6 +2,16 @@
 pub(all) type PID UInt derive(Eq, Show)
 
 ///|
+pub impl ToJson for PID with to_json(self) {
+  Json::string(self.to_string())
+}
+
+///|
+pub impl Show for PID with to_string(self) {
+  self.inner().to_string(radix=16).to_upper().pad_start(8, '0')
+}
+
+///|
 pub fn PID::to_nature(self : PID) -> Nature {
   Nature::from_uint(self.inner() % 25)
 }
