@@ -128,3 +128,15 @@ test "should truncate the stat before applying the nature modifier" {
   // 19.5 * 1.1 = 21.45
   assert_eq(result.a, 20)
 }
+
+///|
+pub impl ToJson for Stats with to_json(self) {
+  Json::array([
+    Json::number(self.h.to_double()),
+    Json::number(self.a.to_double()),
+    Json::number(self.b.to_double()),
+    Json::number(self.c.to_double()),
+    Json::number(self.d.to_double()),
+    Json::number(self.s.to_double()),
+  ])
+}

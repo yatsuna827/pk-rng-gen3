@@ -36,3 +36,15 @@ pub fn IVs::from_code(hab : UInt, scd : UInt) -> IVs {
 pub fn IVs::as_tuple(self : IVs) -> (UInt, UInt, UInt, UInt, UInt, UInt) {
   (self.h, self.a, self.b, self.c, self.d, self.s)
 }
+
+///|
+pub impl ToJson for IVs with to_json(self) {
+  Json::array([
+    Json::number(self.h.to_double()),
+    Json::number(self.a.to_double()),
+    Json::number(self.b.to_double()),
+    Json::number(self.c.to_double()),
+    Json::number(self.d.to_double()),
+    Json::number(self.s.to_double()),
+  ])
+}
