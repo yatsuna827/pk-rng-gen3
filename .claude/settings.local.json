@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(moon check:*)",
+      "Bash(moon test:*)",
+      "Bash(moon fmt:*)",
+      "Bash(moon info:*)",
+      "Bash(moon run:*)",
+      "WebFetch(*)"
+    ],
+    "deny": []
+  }
+}

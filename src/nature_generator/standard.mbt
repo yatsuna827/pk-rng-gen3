@@ -1,7 +1,7 @@
 ///|
 pub fn standard(lcg_ref : @lcg32.Lcg32Ref) -> @core.Nature {
   let nature_value = lcg_ref.get_rand(m=25)
-  @core.Nature::from_value(nature_value)
+  @core.Nature::from_uint(nature_value)
 }
 
 ///|
