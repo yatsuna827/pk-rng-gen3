@@ -7,12 +7,12 @@ pub(all) enum PokeBlockFlavor {
   Sour // 酸っぱい
 } derive(Eq, Show)
 
-///| ポロック
+///|
 pub(all) struct PokeBlock {
   flavor : PokeBlockFlavor
 } derive(Eq, Show)
 
-///| ポロック作成
+///|
 pub fn PokeBlock::new(flavor : PokeBlockFlavor) -> PokeBlock {
   { flavor, }
 }
