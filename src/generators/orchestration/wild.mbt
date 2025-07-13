@@ -51,13 +51,13 @@ test "wild pokemon generation matches C# implementation" {
     @encounter_slot.GBASlot::new(plusle, 13, 13),
   ]
   let generate = wild_pokemon(
-    encounter_fn=@roll_encounter.roll_encounter_force,
+    encounter_fn=@encounter.roll_encounter_force,
     slot_fn=@encounter_slot.generate_slot(
       @encounter_slot.EncounterTable::grass(slots),
     ),
-    level_fn=@level_generator.standard,
-    ivs_fn=@ivs_generator.prior_interrupt,
-    nature_fn=@nature_generator.standard,
+    level_fn=@level.standard,
+    ivs_fn=@ivs.prior_interrupt,
+    nature_fn=@nature.standard,
   )
 
   // C#実装結果: Seed: 12345678, Pokemon: ラクライ, Lv=12, PID=B22F82C3, Nature=Modest, IVs=[7,25,3,5,9,26]

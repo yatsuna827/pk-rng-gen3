@@ -1,0 +1,15 @@
+{
+  "import": [
+    "yatsuna827/pk-rng-gen3/core",
+    {
+      "path": "yatsuna827/pk-rng-lcg32",
+      "alias": "lcg32"
+    },
+    "yatsuna827/pk-rng-gen3/generators/unit/encounter",
+    "yatsuna827/pk-rng-gen3/generators/unit/encounter_slot",
+    "yatsuna827/pk-rng-gen3/generators/unit/level",
+    "yatsuna827/pk-rng-gen3/generators/unit/pid",
+    "yatsuna827/pk-rng-gen3/generators/unit/ivs",
+    "yatsuna827/pk-rng-gen3/generators/unit/nature"
+  ]
+}
