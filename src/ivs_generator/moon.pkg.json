@@ -1,6 +1,9 @@
 {
   "import": [
-    "yatsuna_827/pk-rng-gen3/core",
-    "yatsuna_827/pk-rng-gen3/lcg32"
+    "yatsuna827/pk-rng-gen3/core",
+    {
+      "path": "yatsuna827/pk-rng-lcg32",
+      "alias": "lcg32"
+    }
   ]
 }

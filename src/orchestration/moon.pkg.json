@@ -1,12 +1,15 @@
 {
   "import": [
-    "yatsuna_827/pk-rng-gen3/core",
-    "yatsuna_827/pk-rng-gen3/lcg32",
-    "yatsuna_827/pk-rng-gen3/encounter_slot",
-    "yatsuna_827/pk-rng-gen3/roll_encounter",
-    "yatsuna_827/pk-rng-gen3/level_generator",
-    "yatsuna_827/pk-rng-gen3/pid",
-    "yatsuna_827/pk-rng-gen3/ivs_generator",
-    "yatsuna_827/pk-rng-gen3/nature_generator"
+    "yatsuna827/pk-rng-gen3/core",
+    {
+      "path": "yatsuna827/pk-rng-lcg32",
+      "alias": "lcg32"
+    },
+    "yatsuna827/pk-rng-gen3/encounter_slot",
+    "yatsuna827/pk-rng-gen3/roll_encounter",
+    "yatsuna827/pk-rng-gen3/level_generator",
+    "yatsuna827/pk-rng-gen3/pid",
+    "yatsuna827/pk-rng-gen3/ivs_generator",
+    "yatsuna827/pk-rng-gen3/nature_generator"
   ]
 }
